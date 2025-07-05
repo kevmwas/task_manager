@@ -10,6 +10,7 @@ import KanBanTasks from "./pages/Tasks/Kanban";
 import TasksList from "./pages/Tasks/List";
 import Calendar from "./pages/Calendar";
 import ScrollToTop from "./components/common/ScrollToTop";
+import UserProfile from "./pages/UserProfiles";
 
 export default function App() {
   return (
@@ -24,6 +25,7 @@ export default function App() {
             <Route path="/users" element={<Users />} />
             <Route path="/admins" element={<Admins />} />
             <Route path="/calendar" element={<Calendar />} />
+            <Route path="/profile" element={<UserProfile />} />
           </Route>
 
           <Route path="/signin" element={<SignIn />} />

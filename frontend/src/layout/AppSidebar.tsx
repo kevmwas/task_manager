@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Link, useLocation } from "react-router";
 
-// Assume these icons are imported from an icon library
 import {
   BoxCubeIcon,
   CalenderIcon,
@@ -28,7 +27,10 @@ const navItems: NavItem[] = [
   {
     icon: <TaskIcon />,
     name: "Tasks",
-    path: "/tasks",
+    subItems: [
+      { name: "List", path: "/list-taks"},
+       { name: "Kanban", path: "/kanban-tasks"},
+    ],
   },
   {
     icon: <CalenderIcon />,

@@ -36,16 +36,11 @@ public class User {
     @Column(nullable = false, unique = true)
     private String phone;
 
-    @NotNull
-    @NotBlank(message = "Id no cannot be blank")
-    @Column(nullable = false, unique = true)
+    @Column(nullable = true)
     private String id_no;
 
-    @Column(nullable = true)
-    private Blob bio;
-
-    @Column(nullable = true)
-    private String role;
+    @Column(nullable = true, columnDefinition = "TEXT")
+    private String bio;
 
     @Column(nullable = true)
     private String gender;
@@ -66,39 +61,25 @@ public class User {
     private String city;
 
     @Column(nullable = true)
-    private String next_of_kin;
-
-    @Column(nullable = true)
-    private String next_of_kin_contact;
-
-    @Column(nullable = true)
     private String otp_code;
 
     @Column(nullable = true)
     private String otp_expiration;
 
-    @Column(nullable = false, columnDefinition="boolean DEFAULT true")
+    @Column(nullable = false, columnDefinition = "BOOLEAN DEFAULT TRUE")
     private boolean is_active;
 
-    @Column(nullable = false, columnDefinition="boolean DEFAULT false")
-    private boolean is_blocked;
-
-    @Column(nullable = true)
-    private int rating = 0;
-
-    @Column(nullable = true, columnDefinition="varchar(500) DEFAULT 'default.jpg'")
+    @Column(nullable = true, columnDefinition = "varchar(500) DEFAULT 'default.jpg'")
     private String profile;
 
     @Column(nullable = true, updatable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private LocalDateTime created_at;
 
-    @Column(nullable = true, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP") // Ensure this column is always updated
+    @Column(nullable = true, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP") // Ensure this column is always updated
     private LocalDateTime updated_at;
 
-    public User(Long id, String first_name, String last_name, String email, String password, String phone, String id_no, Blob bio,
-                String role, String gender, String dob, String country, String county, String location, String city,
-                String next_of_kin, String next_of_kin_contact, String otp_code, String otp_expiration, boolean is_active,
-                boolean is_blocked, int rating, String profile, LocalDateTime created_at, LocalDateTime updated_at) {
+    public User(Long id, String first_name, String last_name, String email, String password, String phone, String id_no, String bio,
+                String gender, String dob, String country, String county, String location, String city, String otp_code, String otp_expiration, boolean is_active, String profile, LocalDateTime created_at, LocalDateTime updated_at) {
         this.id = id;
         this.first_name = first_name;
         this.last_name = last_name;
@@ -107,23 +88,22 @@ public class User {
         this.phone = phone;
         this.id_no = id_no;
         this.bio = bio;
-        this.role = role;
         this.gender = gender;
         this.dob = dob;
         this.country = country;
         this.county = county;
         this.location = location;
         this.city = city;
-        this.next_of_kin = next_of_kin;
-        this.next_of_kin_contact = next_of_kin_contact;
         this.otp_code = otp_code;
         this.otp_expiration = otp_expiration;
         this.is_active = is_active;
-        this.is_blocked = is_blocked;
-        this.rating = rating;
         this.profile = profile;
         this.created_at = created_at;
         this.updated_at = updated_at;
+    }
+
+    public User() {
+
     }
 
     public Long getId() {
@@ -182,20 +162,12 @@ public class User {
         this.id_no = id_no;
     }
 
-    public Blob getBio() {
+    public String getBio() {
         return bio;
     }
 
-    public void setBio(Blob bio) {
+    public void setBio(String bio) {
         this.bio = bio;
-    }
-
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
     }
 
     public String getGender() {
@@ -246,22 +218,6 @@ public class User {
         this.city = city;
     }
 
-    public String getNext_of_kin() {
-        return next_of_kin;
-    }
-
-    public void setNext_of_kin(String next_of_kin) {
-        this.next_of_kin = next_of_kin;
-    }
-
-    public String getNext_of_kin_contact() {
-        return next_of_kin_contact;
-    }
-
-    public void setNext_of_kin_contact(String next_of_kin_contact) {
-        this.next_of_kin_contact = next_of_kin_contact;
-    }
-
     public String getOtp_code() {
         return otp_code;
     }
@@ -284,22 +240,6 @@ public class User {
 
     public void setIs_active(boolean is_active) {
         this.is_active = is_active;
-    }
-
-    public boolean isIs_blocked() {
-        return is_blocked;
-    }
-
-    public void setIs_blocked(boolean is_blocked) {
-        this.is_blocked = is_blocked;
-    }
-
-    public int getRating() {
-        return rating;
-    }
-
-    public void setRating(int rating) {
-        this.rating = rating;
     }
 
     public String getProfile() {

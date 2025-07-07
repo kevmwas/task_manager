@@ -53,7 +53,8 @@ public class UserServiceImpl implements UserService {
 
             return registrationRepository.save(user);
         } catch (Exception error) {
-            throw new EtResourceNotFoundException("Invalid details. Failed to create new user");
+            System.out.println(error);
+            throw new EtBadRequestException("Invalid details. Failed to create new user");
         }
     }
 

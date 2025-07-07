@@ -33,6 +33,7 @@ public class RegistrationResource {
         filteredUser.put("profile", user.getProfile());
         filteredUser.put("gender", user.getGender());
         filteredUser.put("email", user.getEmail());
+        filteredUser.put("role", user.getRole());
         
         Map<String, Object> response = new HashMap<>();
         response.put("token", generateJWTToken(user).get("token"));
@@ -55,6 +56,7 @@ public class RegistrationResource {
         filteredUser.put("profile", user.getProfile());
         filteredUser.put("gender", user.getGender());
         filteredUser.put("email", user.getEmail());
+        filteredUser.put("role", user.getRole());
 
         Map<String, Object> response = new HashMap<>();
         response.put("token", generateJWTToken(user).get("token"));
@@ -71,6 +73,7 @@ public class RegistrationResource {
                    .claim("first_name", users.getFirst_name())
                    .claim("last_name", users.getLast_name())
                    .claim("profile", users.getProfile())
+                   .claim("role", users.getRole())
                    .compact();
 
            Map<String, String> map = new HashMap<>();

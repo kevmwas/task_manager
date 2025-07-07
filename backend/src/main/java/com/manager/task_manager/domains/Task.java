@@ -36,17 +36,13 @@ public class Task {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "created_by", nullable = false)
     @NotNull(message = "created by cannot be blank")
-    private Admin createdBy;
+    private User createdBy;
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     @NotBlank(message = "assigned to cannot be blank")
     @JoinColumn(name = "assigned_to", nullable = false)
     private User assigned_to;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "my_task", nullable = true)
-    private User myTask;
 
     @Column(nullable = true, updatable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private LocalDateTime created_at;
@@ -118,14 +114,6 @@ public class Task {
         this.title = title;
     }
 
-    public Admin getCreatedBy() {
-        return createdBy;
-    }
-
-    public void setCreatedBy(Admin createdBy) {
-        this.createdBy = createdBy;
-    }
-
     public User getAssigned_to() {
         return assigned_to;
     }
@@ -134,12 +122,12 @@ public class Task {
         this.assigned_to = assigned_to;
     }
 
-    public User getMyTask() {
-        return myTask;
+    public User getCreatedBy() {
+        return createdBy;
     }
 
-    public void setMyTask(User myTask) {
-        this.myTask = myTask;
+    public void setCreatedBy(User createdBy) {
+        this.createdBy = createdBy;
     }
 
     public LocalDateTime getCreated_at() {

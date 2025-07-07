@@ -14,6 +14,7 @@ import UserProfile from "./pages/UserProfiles";
 
 const App = () => {
   const token: any = localStorage.getItem("auth_token");
+  const userInfo  = localStorage.getItem("user_data") ? JSON.parse(localStorage.getItem("user_data")) : {}
 
   return (
     <>
@@ -25,10 +26,15 @@ const App = () => {
               <Route index path="/dashboard" element={<Home />} />
               <Route path="/list-taks" element={<TasksList />} />
               <Route path="/kanban-tasks" element={<KanBanTasks />} />
-              <Route path="/users" element={<Users />} />
-              <Route path="/admins" element={<Admins />} />
               <Route path="/calendar" element={<Calendar />} />
               <Route path="/profile" element={<UserProfile />} />
+            </Route>
+          }
+
+          {userInfo.role !== "admin" ? <Route path="*" element={<NotFound />} /> : 
+            <Route element={<AppLayout />}>
+               <Route path="/users" element={<Users />} />
+               <Route path="/admins" element={<Admins />} />
             </Route>
           }
 

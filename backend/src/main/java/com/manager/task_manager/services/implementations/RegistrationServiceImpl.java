@@ -1,6 +1,7 @@
 package com.manager.task_manager.services.implementations;
 
 import com.manager.task_manager.domains.User;
+import com.manager.task_manager.domains.enums.UserRoles;
 import com.manager.task_manager.exceptions.EtBadRequestException;
 import com.manager.task_manager.exceptions.EtConflictException;
 import com.manager.task_manager.exceptions.EtResourceNotFoundException;
@@ -47,6 +48,9 @@ public class RegistrationServiceImpl implements RegistrationService {
             user.setIs_active(true);
             user.setProfile("default.png");
             user.setPassword(hashedPassword);
+            user.setRole(UserRoles.user);
+            user.setCreatedAt(java.time.LocalDateTime.now());
+            user.setUpdatedAt(java.time.LocalDateTime.now());
 
             return registrationRepository.save(user);
         } catch (Exception error) {

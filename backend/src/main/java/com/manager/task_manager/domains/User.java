@@ -1,5 +1,6 @@
 package com.manager.task_manager.domains;
 
+import com.manager.task_manager.domains.enums.UserRoles;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -72,6 +73,9 @@ public class User {
     @Column(nullable = true, columnDefinition = "varchar(500) DEFAULT 'default.jpg'")
     private String profile;
 
+    @Column(nullable = false)
+    private UserRoles role;
+
     @Column(nullable = true, updatable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private LocalDateTime created_at;
 
@@ -92,6 +96,7 @@ public class User {
         this.city = city;
         this.is_active = is_active;
         this.profile = profile;
+        this.role = UserRoles.user;
     }
 
     public User() {
@@ -240,6 +245,14 @@ public class User {
 
     public void setProfile(String profile) {
         this.profile = profile;
+    }
+
+    public UserRoles getRole() {
+        return role;
+    }
+
+    public void setRole(UserRoles role) {
+        this.role = role;
     }
 
     public LocalDateTime getCreatedAt() {

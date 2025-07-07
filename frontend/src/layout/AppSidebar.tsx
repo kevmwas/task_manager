@@ -18,6 +18,8 @@ type NavItem = {
   subItems?: { name: string; path: string; pro?: boolean; new?: boolean }[];
 };
 
+const userInfo  = localStorage.getItem("user_data") ? JSON.parse(localStorage.getItem("user_data")) : {}
+
 const navItems: NavItem[] = [
   {
     icon: <GridIcon />,
@@ -37,7 +39,10 @@ const navItems: NavItem[] = [
     name: "Calendar",
     path: "/calendar",
   },
-  {
+];
+
+if(userInfo.role === "admin") {
+  navItems.push({
     icon: <UserCircleIcon />,
     name: "Users",
     path: "/users",
@@ -46,8 +51,8 @@ const navItems: NavItem[] = [
     icon: <BoxCubeIcon />,
     name: "Admins",
     path: "/admins",
-  }
-];
+  })
+}
 
 const othersItems: NavItem[] = [];
 

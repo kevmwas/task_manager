@@ -44,6 +44,8 @@ public class RegistrationServiceImpl implements RegistrationService {
             user.setLast_name(last_name);
             user.setEmail(email);
             user.setPhone(phone);
+            user.setIs_active(true);
+            user.setProfile("default.png");
             user.setPassword(hashedPassword);
 
             return registrationRepository.save(user);

@@ -2,7 +2,7 @@ import GridShape from "../../components/common/GridShape";
 import { Link } from "react-router";
 import PageMeta from "../../components/common/PageMeta";
 
-export default function NotFound() {
+const NotFound = () => {
   return (
     <>
       <PageMeta
@@ -34,11 +34,9 @@ export default function NotFound() {
             Back to Home Page
           </Link>
         </div>
-        {/* <!-- Footer --> */}
-        <p className="absolute text-sm text-center text-gray-500 -translate-x-1/2 bottom-6 left-1/2 dark:text-gray-400">
-          &copy; {new Date().getFullYear()} - TailAdmin
-        </p>
       </div>
     </>
   );
 }
+
+export default NotFound

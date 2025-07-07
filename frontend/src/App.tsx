@@ -12,23 +12,27 @@ import Calendar from "./pages/Calendar";
 import ScrollToTop from "./components/common/ScrollToTop";
 import UserProfile from "./pages/UserProfiles";
 
-export default function App() {
+const App = () => {
+  const token: any = localStorage.getItem("auth_token");
+
   return (
     <>
       <Router>
         <ScrollToTop />
         <Routes>
-          <Route element={<AppLayout />}>
-            <Route index path="/" element={<Home />} />
-            <Route path="/list-taks" element={<TasksList />} />
-            <Route path="/kanban-tasks" element={<KanBanTasks />} />
-            <Route path="/users" element={<Users />} />
-            <Route path="/admins" element={<Admins />} />
-            <Route path="/calendar" element={<Calendar />} />
-            <Route path="/profile" element={<UserProfile />} />
-          </Route>
+          {!token || token.length < 1 ? <Route path="*" element={<NotFound />} /> : 
+            <Route element={<AppLayout />}>
+              <Route index path="/dashboard" element={<Home />} />
+              <Route path="/list-taks" element={<TasksList />} />
+              <Route path="/kanban-tasks" element={<KanBanTasks />} />
+              <Route path="/users" element={<Users />} />
+              <Route path="/admins" element={<Admins />} />
+              <Route path="/calendar" element={<Calendar />} />
+              <Route path="/profile" element={<UserProfile />} />
+            </Route>
+          }
 
-          <Route path="/signin" element={<SignIn />} />
+          <Route path="/" element={<SignIn />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
@@ -36,3 +40,5 @@ export default function App() {
     </>
   );
 }
+
+export default App;

@@ -22,22 +22,44 @@ public class RegistrationResource {
     RegistrationService registrationService;
 
     @PostMapping("/login")
-    public ResponseEntity<Map<String, String>> loginUser(@RequestBody Map<String, Object> userMap) {
+    public ResponseEntity<Map<String, Object>> loginUser(@RequestBody Map<String, Object> userMap) {
         String identifier = (String) userMap.get("identifier");
         String password = (String) userMap.get("password");
         User user = registrationService.loginUser(identifier, password);
-        return new ResponseEntity<>(generateJWTToken(user), HttpStatus.OK);
+        
+        Map<String, Object> filteredUser = new HashMap<>();
+        filteredUser.put("first_name", user.getFirst_name());
+        filteredUser.put("last_name", user.getLast_name());
+        filteredUser.put("profile", user.getProfile());
+        filteredUser.put("gender", user.getGender());
+        filteredUser.put("email", user.getEmail());
+        
+        Map<String, Object> response = new HashMap<>();
+        response.put("token", generateJWTToken(user).get("token"));
+        response.put("user", filteredUser);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @PostMapping("/register")
-    public ResponseEntity<Map<String, String>> registerUser(@RequestBody Map<String, Object>  userMap) {
+    public ResponseEntity<Map<String, Object>> registerUser(@RequestBody Map<String, Object>  userMap) {
         String first_name = (String) userMap.get("first_name");
         String last_name = (String) userMap.get("last_name");
         String email = (String) userMap.get("email");
         String phone = (String) userMap.get("phone");
         String password = (String) userMap.get("password");
-        User users = registrationService.registerUser(first_name, last_name, email, phone, password);
-        return new ResponseEntity<>(generateJWTToken(users), HttpStatus.OK);
+        User user = registrationService.registerUser(first_name, last_name, email, phone, password);
+
+        Map<String, Object> filteredUser = new HashMap<>();
+        filteredUser.put("first_name", user.getFirst_name());
+        filteredUser.put("last_name", user.getLast_name());
+        filteredUser.put("profile", user.getProfile());
+        filteredUser.put("gender", user.getGender());
+        filteredUser.put("email", user.getEmail());
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("token", generateJWTToken(user).get("token"));
+        response.put("user", filteredUser);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     private Map<String, String> generateJWTToken(User users) {

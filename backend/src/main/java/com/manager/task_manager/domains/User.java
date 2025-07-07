@@ -78,28 +78,20 @@ public class User {
     @Column(nullable = true, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP") // Ensure this column is always updated
     private LocalDateTime updated_at;
 
-    public User(Long id, String first_name, String last_name, String email, String password, String phone, String id_no, String bio,
-                String gender, String dob, String country, String county, String location, String city, String otp_code, String otp_expiration, boolean is_active, String profile, LocalDateTime created_at, LocalDateTime updated_at) {
+    public User(Long id, String first_name, String last_name, String email, String phone, String bio,
+                 String country, String county, String location, String city, boolean is_active, String profile) {
         this.id = id;
         this.first_name = first_name;
         this.last_name = last_name;
         this.email = email;
-        this.password = password;
         this.phone = phone;
-        this.id_no = id_no;
         this.bio = bio;
-        this.gender = gender;
-        this.dob = dob;
         this.country = country;
         this.county = county;
         this.location = location;
         this.city = city;
-        this.otp_code = otp_code;
-        this.otp_expiration = otp_expiration;
         this.is_active = is_active;
         this.profile = profile;
-        this.created_at = created_at;
-        this.updated_at = updated_at;
     }
 
     public User() {

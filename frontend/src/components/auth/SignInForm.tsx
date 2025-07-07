@@ -5,10 +5,24 @@ import Label from "../form/Label";
 import Input from "../form/input/InputField";
 import Checkbox from "../form/input/Checkbox";
 import Button from "../ui/button/Button";
+import { signin } from "../../api/auth";
 
 const SignInForm = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
+
+    const login = async (event: any) => {
+        event.preventDefault();
+        const formData = new FormData(event.currentTarget);
+    
+        const data = {
+          identifier: formData.get("identifier"),
+          password: formData.get("password")
+        };
+    
+        await signin(data)
+      }
+
   return (
     <div className="flex flex-col flex-1">
       <div className="flex flex-col justify-center flex-1 w-full max-w-md mx-auto">
@@ -22,23 +36,16 @@ const SignInForm = () => {
             </p>
           </div>
           <div>
-            <form>
+            <form method="POST" onSubmit={login}>
               <div className="space-y-6">
                 <div>
-                  <Label>
-                    Email <span className="text-error-500">*</span>{" "}
-                  </Label>
-                  <Input placeholder="info@gmail.com" />
+                  <Label> Email or phone no <span className="text-error-500">*</span></Label>
+                  <Input name="identifier" placeholder="email or phone no" />
                 </div>
                 <div>
-                  <Label>
-                    Password <span className="text-error-500">*</span>{" "}
-                  </Label>
+                  <Label> Password <span className="text-error-500">*</span></Label>
                   <div className="relative">
-                    <Input
-                      type={showPassword ? "text" : "password"}
-                      placeholder="Enter your password"
-                    />
+                    <Input name="password" type={showPassword ? "text" : "password"} placeholder="Enter your password" />
                     <span
                       onClick={() => setShowPassword(!showPassword)}
                       className="absolute z-30 -translate-y-1/2 cursor-pointer right-4 top-1/2"
@@ -58,12 +65,6 @@ const SignInForm = () => {
                       Keep me logged in
                     </span>
                   </div>
-                  <Link
-                    to="/reset-password"
-                    className="text-sm text-brand-500 hover:text-brand-600 dark:text-brand-400"
-                  >
-                    Forgot password?
-                  </Link>
                 </div>
                 <div>
                   <Button className="w-full" size="sm">

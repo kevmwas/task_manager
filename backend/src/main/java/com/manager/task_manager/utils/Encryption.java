@@ -1,4 +1,4 @@
-package com.manager.task_manager;
+package com.manager.task_manager.utils;
 
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;

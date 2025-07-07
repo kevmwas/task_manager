@@ -46,11 +46,6 @@ if(userInfo.role === "admin") {
     icon: <UserCircleIcon />,
     name: "Users",
     path: "/users",
-  },
-  {
-    icon: <BoxCubeIcon />,
-    name: "Admins",
-    path: "/admins",
   })
 }
 

@@ -11,5 +11,4 @@ public interface RegistrationRepository extends JpaRepository<User, String> {
     User findByEmail(String email);
 
     User findByPhone(String phone);
-
 }

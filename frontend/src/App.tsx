@@ -34,7 +34,6 @@ const App = () => {
           {userInfo.role !== "admin" ? <Route path="*" element={<NotFound />} /> : 
             <Route element={<AppLayout />}>
                <Route path="/users" element={<Users />} />
-               <Route path="/admins" element={<Admins />} />
             </Route>
           }
 

@@ -2,13 +2,15 @@ package com.manager.task_manager.repositories;
 
 import com.manager.task_manager.domains.User;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Repository
 public interface UserRepository extends JpaRepository<User, String> {
-//    List<User> findAllUsers(String role);
+    List<User> findAll();
 //
 //    List<User> findAllAdmins(String role);
 
-   // User update(User user);
+  //  User update(User user);
 }

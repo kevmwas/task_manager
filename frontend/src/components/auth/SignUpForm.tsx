@@ -19,7 +19,8 @@ const SignUpForm = () => {
         last_name: formData.get("last_name"),
         email: formData.get("email"),
         phone: formData.get("phone"),
-        password: formData.get("password")
+        password: formData.get("password"),
+        role: "user"
       };
   
       await signup(data)

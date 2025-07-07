@@ -22,7 +22,7 @@ public class RegistrationServiceImpl implements RegistrationService {
     RegistrationRepository registrationRepository;
 
     @Override
-    public User registerUser(String first_name, String last_name, String email, String phone, String password) throws EtResourceNotFoundException {
+    public User registerUser(String first_name, String last_name, String email, String phone, String password, String role) throws EtResourceNotFoundException {
         Pattern pattern = Pattern.compile("^(.+)@(.+)$");
         String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt(12));
 
@@ -48,7 +48,7 @@ public class RegistrationServiceImpl implements RegistrationService {
             user.setIs_active(true);
             user.setProfile("default.png");
             user.setPassword(hashedPassword);
-            user.setRole(UserRoles.user);
+            user.setRole(UserRoles.valueOf(role));
             user.setCreatedAt(java.time.LocalDateTime.now());
             user.setUpdatedAt(java.time.LocalDateTime.now());
 

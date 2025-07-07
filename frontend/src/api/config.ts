@@ -5,11 +5,16 @@ export const Config = {
     LOGIN: `${baseUrl}/login`,
     REGISTER: `${baseUrl}/register`,
   },
+  USERS: {
+    ADD_USER: `${baseUrl}/v1/add-user`,
+    ALL_USERS: `${baseUrl}/v1/all-users`,
+  },
 };
 
 export const catchError = (error: any) => {
-  if (error.response.status === 401) {
+  if (error.response.status === 403) {
     localStorage.removeItem("auth_token");
+    localStorage.removeItem("user_data");
     window.location.pathname = "/";
   } else {
     return {
@@ -22,6 +27,7 @@ export const catchError = (error: any) => {
 
 export const headers = {
   headers: {
-    authorization: `Bearer ${localStorage.getItem("auth_token")}`,
+    Authorization: `Bearer ${localStorage.getItem("auth_token")}`,
+    "Content-Type": "application/json",
   },
 };

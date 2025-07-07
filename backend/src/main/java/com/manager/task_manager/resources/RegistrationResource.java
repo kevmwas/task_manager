@@ -1,11 +1,9 @@
 package com.manager.task_manager.resources;
 
-import com.manager.task_manager.Constants;
-import com.manager.task_manager.Encryption;
+import com.manager.task_manager.utils.Constants;
 import com.manager.task_manager.domains.User;
 import com.manager.task_manager.services.interfaces.RegistrationService;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import com.manager.task_manager.utils.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,10 +14,15 @@ import java.util.*;
 @RestController
 @RequestMapping("")
 public class RegistrationResource {
-    Encryption encryption = new Encryption();
+   private final JwtService jwtService;
+
+    public RegistrationResource() {
+        this.jwtService = new JwtService(Constants.API_SECRET_KEY);
+    }
 
     @Autowired
     RegistrationService registrationService;
+
 
     @PostMapping("/login")
     public ResponseEntity<Map<String, Object>> loginUser(@RequestBody Map<String, Object> userMap) {
@@ -36,7 +39,7 @@ public class RegistrationResource {
         filteredUser.put("role", user.getRole());
         
         Map<String, Object> response = new HashMap<>();
-        response.put("token", generateJWTToken(user).get("token"));
+        response.put("token", jwtService.generateJWTToken(user));
         response.put("user", filteredUser);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
@@ -48,7 +51,8 @@ public class RegistrationResource {
         String email = (String) userMap.get("email");
         String phone = (String) userMap.get("phone");
         String password = (String) userMap.get("password");
-        User user = registrationService.registerUser(first_name, last_name, email, phone, password);
+        String role = (String) userMap.get("role");
+        User user = registrationService.registerUser(first_name, last_name, email, phone, password, role);
 
         Map<String, Object> filteredUser = new HashMap<>();
         filteredUser.put("first_name", user.getFirst_name());
@@ -59,25 +63,9 @@ public class RegistrationResource {
         filteredUser.put("role", user.getRole());
 
         Map<String, Object> response = new HashMap<>();
-        response.put("token", generateJWTToken(user).get("token"));
+        response.put("token",jwtService.generateJWTToken(user) );
         response.put("user", filteredUser);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
-
-    private Map<String, String> generateJWTToken(User users) {
-           long timestamp  = System.currentTimeMillis();
-           String token = Jwts.builder().signWith(SignatureAlgorithm.HS512, Constants.generateSecretKey())
-                   .setIssuedAt(new Date(timestamp))
-                   .setExpiration(new Date(timestamp + Constants.TOKEN_VALIDITY))
-                   .claim("id", encryption.encrypt(Long.toString(users.getId()), Constants.ID_SECRET_KEY))
-                   .claim("first_name", users.getFirst_name())
-                   .claim("last_name", users.getLast_name())
-                   .claim("profile", users.getProfile())
-                   .claim("role", users.getRole())
-                   .compact();
-
-           Map<String, String> map = new HashMap<>();
-           map.put("token", token);
-           return map;
-    }
 }
+

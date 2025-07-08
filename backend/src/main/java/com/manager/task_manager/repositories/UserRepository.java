@@ -11,6 +11,4 @@ public interface UserRepository extends JpaRepository<User, String> {
     List<User> findAll();
 //
 //    List<User> findAllAdmins(String role);
-
-  //  User update(User user);
 }

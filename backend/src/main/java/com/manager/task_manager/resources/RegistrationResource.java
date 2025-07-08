@@ -51,8 +51,7 @@ public class RegistrationResource {
         String email = (String) userMap.get("email");
         String phone = (String) userMap.get("phone");
         String password = (String) userMap.get("password");
-        String role = (String) userMap.get("role");
-        User user = registrationService.registerUser(first_name, last_name, email, phone, password, role);
+        User user = registrationService.registerUser(first_name, last_name, email, phone, password);
 
         Map<String, Object> filteredUser = new HashMap<>();
         filteredUser.put("first_name", user.getFirst_name());

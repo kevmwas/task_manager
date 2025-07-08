@@ -1,8 +1,32 @@
+import { useEffect, useState } from "react";
 import PageBreadcrumb from "../../components/common/PageBreadCrumb";
 import PageMeta from "../../components/common/PageMeta";
 import TaskHeader from "./components/tasks_header";
+import { getUsers } from "../../api/users";
 
 const TasksList = () => {
+  const [users, setUsers] = useState([]);
+  const [isActive, setIsActive] = useState(false);
+  
+  useEffect(() => {
+    const fetchUsers = async () => {
+      const users = await getUsers();
+      const allUsers = users.filter((user: any) => user.role === "user");
+      setUsers(allUsers);
+    }
+
+    fetchUsers();
+  }, []);
+  
+  
+  const counts = {
+    total: 15,
+    to_do: 3,
+    in_progress: 3,
+    completed: 4,
+    cancelled: 5
+  }
+
   return (
     <>
       <PageMeta
@@ -12,13 +36,13 @@ const TasksList = () => {
       <PageBreadcrumb pageTitle="Tasks list" />
       <div className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] lg:p-6">
         <div className="flex flex-col items-center px-4 py-5 xl:px-6 xl:py-6">
-          <TaskHeader />
+          <TaskHeader users={users.length ? users : []} counts={counts} isActive={isActive} />
         </div>
         <div className="p-4 space-y-8 border-t border-gray-200 mt-7 dark:border-gray-800 sm:mt-0 xl:p-6">
           <div>
             <div className="flex items-center justify-between mb-2">
-              <h3 className="flex items-center gap-3 text-base font-medium text-gray-800 capitalize dark:text-white/90">todo<
-                span className="inline-flex rounded-full px-2 py-0.5 text-theme-xs font-medium bg-gray-100 text-gray-700 dark:bg-white/[0.03] dark:text-white/80">3
+              <h3 className="flex items-center gap-3 text-base font-medium text-gray-800 capitalize dark:text-white/90">todo
+                <span className="inline-flex rounded-full px-2 py-0.5 text-theme-xs font-medium bg-gray-100 text-gray-700 dark:bg-white/[0.03] dark:text-white/80">3
                 </span>
               </h3>
               <div className="relative">

@@ -1,20 +1,53 @@
 package com.manager.task_manager.services.implementations;
 
 import com.manager.task_manager.domains.Task;
+import com.manager.task_manager.domains.User;
+import com.manager.task_manager.exceptions.EtBadRequestException;
+import com.manager.task_manager.exceptions.EtResourceNotFoundException;
 import com.manager.task_manager.repositories.TaskRepository;
 import com.manager.task_manager.services.interfaces.TaskService;
+import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
+
 @Service
 public class TaskServiceImpl implements TaskService {
    @Autowired
    TaskRepository taskRepository;
 
     @Override
-    public List<Task> getAllTasks() {
-        return taskRepository.findAll();
+    public List<Task> fndMyTasks(Long assigned_to) throws EtBadRequestException {
+        try {
+            return taskRepository.findAllByAssigned_to(assigned_to);
+        } catch (Exception error) {
+            throw new EtResourceNotFoundException("Invalid details. Failed to find my tasks");
+        }
+    }
+
+    @Override
+    public Task addNewTask(Task task) throws EtBadRequestException {
+        try {
+            task.setUpdated_at(java.time.LocalDateTime.now());
+            task.setCreated_at(java.time.LocalDateTime.now());
+
+            return taskRepository.save(task);
+        } catch (Exception error) {
+            System.out.println("the error is here" + error);
+            throw new EtBadRequestException("Invalid details. Failed to create new user");
+        }
+    }
+
+    @Override
+    public Task updateTask(Task task) throws EtBadRequestException {
+        return null;
+    }
+
+    @Override
+    public long countByStatus(String status) throws EtBadRequestException {
+        return 0;
     }
 
         /*

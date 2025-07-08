@@ -1,8 +1,32 @@
+import { useEffect, useState } from "react";
 import PageBreadcrumb from "../../components/common/PageBreadCrumb";
 import PageMeta from "../../components/common/PageMeta";
 import TaskHeader from "./components/tasks_header";
+import { getUsers } from "../../api/users";
 
 const KanBanTasks = () => {
+  const [users, setUsers] = useState([]);
+  const [isActive, setIsActive] = useState(false);
+  
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      const users = await getUsers();
+      const allUsers = users.filter((user: any) => user.role === "user");
+      setUsers(allUsers);
+    }
+
+    fetchUsers();
+  }, []);
+
+  const counts = {
+    total: 15,
+    to_do: 3,
+    in_progress: 3,
+    completed: 4,
+    cancelled: 5
+  }
+
   return (
     <>
       <PageMeta
@@ -12,7 +36,7 @@ const KanBanTasks = () => {
       <PageBreadcrumb pageTitle="Tasks list" />
       <div className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] lg:p-6">
         <div className="flex flex-col items-center px-4 py-5 xl:px-6 xl:py-6">
-          <TaskHeader />
+          <TaskHeader users={users.length ? users : []} counts={counts} isActive={isActive} />
         </div>
         <div className="grid grid-cols-1 border-t border-gray-200 divide-x divide-gray-200 dark:divide-white/[0.05] mt-7 dark:border-white/[0.05] sm:mt-0 sm:grid-cols-2 xl:grid-cols-3">
           <div className="flex flex-col gap-5 p-4 swim-lane xl:p-6">

@@ -8,16 +8,20 @@ import Label from "../../components/form/Label";
 import Input from "../../components/form/input/InputField";
 import { EyeCloseIcon, EyeIcon } from "../../icons";
 import { getUsers, newUser } from "../../api/users";
+import Skeleton from "../../components/ui/skeleton";
 
 const Users = () => {
   const { isOpen, openModal, closeModal } = useModal();
   const [showPassword, setShowPassword] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
   const [users, setUsers] = useState([]);
   
   const addUser = async (event: any) => {
     event.preventDefault();
 
-    await newUser(event)
+    await newUser(event);
+
+    closeModal()
   }
 
   useEffect(() => {
@@ -29,22 +33,30 @@ const Users = () => {
     fetchUsers();
   }, []);
 
-console.log(users)
+
+  type User = {
+    role?: string;
+    [key: string]: any;
+  };
+
+  const allUsers = (users as User[]).filter((user) => user.role === "user");
+  const allAdmins = (users as User[]).filter((user) => user.role === "admin");
+
   return (
     <>
       <PageMeta
         title="Users"
         description="App Users"
       />
-      <PageBreadcrumb pageTitle="Users" />
+      <PageBreadcrumb pageTitle={isAdmin ? "Admins" : "Users"} />
       <div className="space-y-6">
         <div className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] lg:p-6">
         <div className="flex flex-col items-center px-4 py-5 xl:px-6 xl:py-6">
           <div className="flex flex-col w-full gap-5 sm:justify-between xl:flex-row xl:items-center">
             <div className="grid grid-cols-2 sm:grid-cols-4 items-center gap-x-1 gap-y-2 rounded-lg bg-gray-100 p-0.5 dark:bg-gray-900">
-              <button className="inline-flex items-center xl:justify-start justify-center gap-2 px-4 py-2 text-sm font-medium rounded-md group hover:text-gray-900 dark:hover:text-white text-gray-900 dark:text-white bg-white dark:bg-gray-800">Userss
+              <button onClick={() => setIsAdmin(false)} className={`inline-flex items-center xl:justify-start justify-center gap-2 px-4 py-2 text-sm font-medium rounded-md group hover:text-gray-900 dark:hover:text-white text-gray-900 ${!isAdmin ? "dark:text-white bg-white dark:bg-gray-800" : "dark:text-gray-400"}`}>Users
               </button>
-              <button className="inline-flex items-center xl:justify-start justify-center gap-2 px-4 py-2 text-sm font-medium rounded-md group hover:text-gray-900 dark:hover:text-white text-gray-500 dark:text-gray-400">Admins
+              <button onClick={() => setIsAdmin(true)} className={`inline-flex items-center xl:justify-start justify-center gap-2 px-4 py-2 text-sm font-medium rounded-md group hover:text-gray-900 dark:hover:text-white text-gray-500 ${isAdmin ? "dark:text-white bg-white dark:bg-gray-800" : "dark:text-gray-400"}`}>Admins
               </button>
             </div>
             <div className="flex flex-wrap items-center gap-3 xl:justify-end">
@@ -57,7 +69,7 @@ console.log(users)
         </div>
         <div className="p-4 space-y-8 border-t border-gray-200 mt-7 dark:border-gray-800 sm:mt-0 xl:p-6">
           <div>
-            <BasicTableOne />
+            {users.length ? isAdmin ? <BasicTableOne data={allAdmins} /> : <BasicTableOne data={allUsers} /> : <Skeleton />}
           </div>
         </div>
       </div>
@@ -102,7 +114,7 @@ console.log(users)
             <div>
               <Label>User Bio</Label>
               <div className="relative">
-                <textarea className="w-full rounded-lg border px-4 py-2.5 text-sm shadow-theme-xs focus:outline-hidden bg-transparent text-gray-900 dark:text-gray-300 text-gray-900 border-gray-300 focus:border-brand-300 focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:focus:border-brand-800"></textarea>
+                <textarea name="bio" className="w-full rounded-lg border px-4 py-2.5 text-sm shadow-theme-xs focus:outline-hidden bg-transparent text-gray-900 dark:text-gray-300 text-gray-900 border-gray-300 focus:border-brand-300 focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:focus:border-brand-800"></textarea>
               </div>
             </div>
             <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">

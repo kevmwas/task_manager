@@ -1,6 +1,7 @@
 package com.manager.task_manager.services.implementations;
 
 import com.manager.task_manager.domains.User;
+import com.manager.task_manager.exceptions.EtAuthException;
 import com.manager.task_manager.exceptions.EtBadRequestException;
 import com.manager.task_manager.exceptions.EtResourceNotFoundException;
 import com.manager.task_manager.repositories.RegistrationRepository;
@@ -53,7 +54,7 @@ public class UserServiceImpl implements UserService {
 
             return registrationRepository.save(user);
         } catch (Exception error) {
-            System.out.println(error);
+            System.out.println("the error is here" + error);
             throw new EtBadRequestException("Invalid details. Failed to create new user");
         }
     }
@@ -65,6 +66,19 @@ public class UserServiceImpl implements UserService {
             return userRepository.findAll();
         } catch (Exception error) {
             throw new EtResourceNotFoundException("Invalid details. Failed to create new user");
+        }
+    }
+
+    @Override
+    public void updateUser(String role, User user) throws EtBadRequestException {
+        try {
+            if (Objects.equals(role, "admin")) {
+                registrationRepository.save(user);
+            } else {
+                throw new EtAuthException("You are not authorised to carry out this function");
+            }
+        } catch (Exception error) {
+            throw new EtBadRequestException("Invalid user update request: User not updated");
         }
     }
 }

@@ -1,6 +1,7 @@
 package com.manager.task_manager.resources;
 
 import com.manager.task_manager.domains.User;
+import com.manager.task_manager.domains.enums.UserRoles;
 import com.manager.task_manager.services.interfaces.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +21,7 @@ public class UserResource {
     UserService userService;
 
     @PostMapping("/add-user")
-    public ResponseEntity<Map<String, Object>> addUser(HttpServletRequest request, @RequestBody User user) {
+    public ResponseEntity<Map<String, Object>> addUser(@RequestBody User user) {
         userService.addNewUser(user);
 
         Map<String, Object> filteredUser = new HashMap<>();
@@ -43,4 +44,45 @@ public class UserResource {
         users.forEach(user -> user.setPassword(null));
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
+
+    @PatchMapping("/update-user")
+    public ResponseEntity<Map<String, Boolean>> updateUser(HttpServletRequest request,
+                                                           @RequestBody User user) {
+        String role = (String) request.getAttribute("role");
+        userService.updateUser(role, user);
+        Map<String, Boolean> map = new HashMap<>();
+        map.put("User successfully updated", true);
+        return new ResponseEntity<>(map, HttpStatus.OK);
+    }
+//
+//    @PatchMapping("/update-self")
+//    public ResponseEntity<Map<String, Boolean>> updateSelf(HttpServletRequest request,
+//                                                           @RequestBody Users users) {
+//        int user_id = (Integer) request.getAttribute("user_id");
+//        userService.updateSelf(user_id, users);
+//        Map<String, Boolean> map = new HashMap<>();
+//        map.put("User successfully updated", true);
+//        return new ResponseEntity<>(map, HttpStatus.OK);
+//    }
+
+//    @PatchMapping("/update-password")
+//    public ResponseEntity<Map<String, Boolean>> updateUserPwd(HttpServletRequest request,
+//                                                              @RequestBody Users users) {
+//        int userId = (Integer) request.getAttribute("user_id");
+//        String role = (String) request.getAttribute("role");
+//        userService.updateUserPassword(userId, role, users);
+//        Map<String, Boolean> map = new HashMap<>();
+//        map.put("User password updated successfully", true);
+//        return new ResponseEntity<>(map, HttpStatus.OK);
+//    }
+//
+//    @PatchMapping("/update-self-password")
+//    public ResponseEntity<Map<String, Boolean>> updateSelfPwd(HttpServletRequest request,
+//                                                              @RequestBody Users users) {
+//        int userId = (Integer) request.getAttribute("user_id");
+//        userService.updateSelfPassword(userId, users);
+//        Map<String, Boolean> map = new HashMap<>();
+//        map.put("User password updated successfully", true);
+//        return new ResponseEntity<>(map, HttpStatus.OK);
+//    }
 }

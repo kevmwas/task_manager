@@ -4,13 +4,12 @@ import SignUp from "./pages/AuthPages/SignUp";
 import NotFound from "./pages/OtherPage/NotFound";
 import AppLayout from "./layout/AppLayout";
 import Home from "./pages/Dashboard/Home";
-import Users from "./pages/Users";
-import Admins from "./pages/Admins";
 import KanBanTasks from "./pages/Tasks/Kanban";
 import TasksList from "./pages/Tasks/List";
 import Calendar from "./pages/Calendar";
 import ScrollToTop from "./components/common/ScrollToTop";
 import UserProfile from "./pages/UserProfiles";
+import Users from "./pages/Users/users";
 
 const App = () => {
   const token: any = localStorage.getItem("auth_token");

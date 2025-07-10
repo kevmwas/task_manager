@@ -4,25 +4,15 @@ import PageMeta from "../../components/common/PageMeta";
 import BasicTableOne from "../../components/tables/BasicTables/BasicTableOne";
 import { Modal } from "../../components/ui/modal";
 import { useModal } from "../../hooks/useModal";
-import Label from "../../components/form/Label";
-import Input from "../../components/form/input/InputField";
-import { EyeCloseIcon, EyeIcon } from "../../icons";
 import { getUsers, newUser } from "../../api/users";
 import Skeleton from "../../components/ui/skeleton";
+import AddUser from "./add_user";
 
 const Users = () => {
   const { isOpen, openModal, closeModal } = useModal();
-  const [showPassword, setShowPassword] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
   const [users, setUsers] = useState([]);
-  
-  const addUser = async (event: any) => {
-    event.preventDefault();
 
-    await newUser(event);
-
-    closeModal()
-  }
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -76,108 +66,7 @@ const Users = () => {
       </div>
 
       <Modal isOpen={isOpen} onClose={closeModal} className="max-w-[700px] p-6 lg:p-10">
-        <form method="POST" onSubmit={addUser}>
-          <div className="space-y-5">
-            <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
-              <div className="sm:col-span-1">
-                <Label>First Name<span className="text-error-500">*</span></Label>
-                <Input type="text" name="first_name" placeholder="Enter your first name" />
-              </div>
-              <div className="sm:col-span-1">
-                <Label>Last Name<span className="text-error-500">*</span></Label>
-                <Input type="text" name="last_name" placeholder="Enter your last name" />
-              </div>
-            </div>
-            <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
-              <div className="sm:col-span-1">
-                <Label>Email<span className="text-error-500">*</span></Label>
-                <Input type="email"name="email" placeholder="Enter your email" />
-              </div>
-              <div className="sm:col-span-1">
-                <Label>Phone Number<span className="text-error-500">*</span></Label>
-                <Input type="number" name="phone" placeholder="Enter your phone number" />
-              </div>
-            </div>
-            <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
-              <div className="sm:col-span-1">
-                <Label>id</Label>
-                <Input type="text" name="id_no" placeholder="Enter your id no" />
-              </div>
-              <div className="sm:col-span-1">
-                <Label>User Role</Label>
-                <select name="role" className="h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 pr-11 text-sm shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800">
-                  <option value="user">user</option>
-                  <option value="admin">admin</option>
-                </select>
-              </div>
-            </div>
-            <div>
-              <Label>User Bio</Label>
-              <div className="relative">
-                <textarea name="bio" className="w-full rounded-lg border px-4 py-2.5 text-sm shadow-theme-xs focus:outline-hidden bg-transparent text-gray-900 dark:text-gray-300 text-gray-900 border-gray-300 focus:border-brand-300 focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:focus:border-brand-800"></textarea>
-              </div>
-            </div>
-            <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
-              <div className="sm:col-span-1">
-                <Label>Date of Birth</Label>
-                <Input type="date"name="dob" placeholder="date of birth" />
-              </div>
-              <div className="sm:col-span-1">
-                <Label>Country</Label>
-                <Input type="text" name="country" placeholder="your country" />
-              </div>
-            </div>
-            <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
-              <div className="sm:col-span-1">
-                <Label>County</Label>
-                <Input type="text"name="county" placeholder="Enter your county" />
-              </div>
-              <div className="sm:col-span-1">
-                <Label>Location</Label>
-                <Input type="text" name="location" placeholder="Enter your phone location" />
-              </div>
-            </div>
-            <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
-              <div className="sm:col-span-1">
-                <Label>City</Label>
-                <Input type="text" name="city" placeholder="Enter your city" />
-              </div>
-              <div className="sm:col-span-1">
-                <Label>Gender</Label>
-                <select name="gender" className="h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 pr-11 text-sm shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800">
-                  <option value="male">Male</option>
-                  <option value="female">Female</option>
-                  <option value="other">Other</option>
-                </select>
-              </div>
-            </div>
-            <div>
-                <Label>Profile picture</Label>
-                <Input type="file" name="profile" />
-            </div>
-            <div>
-              <Label>Password</Label>
-              <div className="relative">
-                <Input placeholder="Enter your password" name="password" type={showPassword ? "text" : "password"} />
-                <span
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute z-30 -translate-y-1/2 cursor-pointer right-4 top-1/2"
-                >
-                  {showPassword ? (
-                    <EyeIcon className="fill-gray-500 dark:fill-gray-400 size-5" />
-                  ) : (
-                    <EyeCloseIcon className="fill-gray-500 dark:fill-gray-400 size-5" />
-                  )}
-                </span>
-              </div>
-            </div>
-            <div>
-              <button className="disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-gray-400 flex items-center justify-center w-full px-4 py-3 text-sm font-medium text-white transition rounded-lg bg-brand-500 shadow-theme-xs hover:bg-brand-600">
-                Add User
-              </button>
-            </div>
-          </div>
-        </form>
+        <AddUser close={closeModal} />
       </Modal>
     </>
   );

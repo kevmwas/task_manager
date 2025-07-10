@@ -7,7 +7,6 @@ import com.manager.task_manager.services.interfaces.RegistrationService;
 import com.manager.task_manager.services.interfaces.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 import org.springframework.http.ResponseEntity;
 

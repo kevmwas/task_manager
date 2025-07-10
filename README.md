@@ -76,5 +76,6 @@ To run the backend locally, follow these steps:
 
 - **Java Spring Boot**: Backend framework for building RESTful APIs.
 - **Maven**: Dependency management and build tool.
+- **POSTGRES**: The main database.
 
 For further configuration or environment variables, refer to the `application.properties` file in the backend source.

@@ -3,7 +3,6 @@ package com.manager.task_manager.domains.dto;
 import com.manager.task_manager.domains.enums.TaskPriority;
 import com.manager.task_manager.domains.enums.TaskStatus;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class TaskDto {

@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 @RestController
 @RequestMapping("/v1")
@@ -61,8 +60,6 @@ public class TaskResource {
 
     @PatchMapping("/update-task")
     public ResponseEntity<Map<String, Object>> updateTask(HttpServletRequest request, @RequestBody Task task) {
-        int id = (Integer) request.getAttribute("id");
-        String role = (String) request.getAttribute("role");
 
         taskService.updateTask(task);
 

@@ -1,13 +1,11 @@
 package com.manager.task_manager.domains;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.manager.task_manager.domains.enums.TaskPriority;
 import com.manager.task_manager.domains.enums.TaskStatus;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
-import java.sql.Blob;
 import java.time.LocalDateTime;
 
 @Entity

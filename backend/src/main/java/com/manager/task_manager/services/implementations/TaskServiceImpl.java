@@ -6,17 +6,14 @@ import com.manager.task_manager.domains.dto.TaskDto;
 import com.manager.task_manager.domains.dto.UserDto;
 import com.manager.task_manager.domains.enums.TaskStatus;
 import com.manager.task_manager.exceptions.EtBadRequestException;
-import com.manager.task_manager.exceptions.EtResourceNotFoundException;
 import com.manager.task_manager.repositories.TaskRepository;
 import com.manager.task_manager.repositories.UserRepository;
 import com.manager.task_manager.services.interfaces.TaskService;
 import jakarta.transaction.Transactional;
-import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -51,34 +48,6 @@ public class TaskServiceImpl implements TaskService {
                 task.getStatus(),
                 task.getPriority()
         );
-    }
-
-    private Task convertToEntity(TaskDto taskDto) {
-        User createdBy = null;
-        if (taskDto.getCreatedBy() != null && taskDto.getCreatedBy().getId() != null) {
-            createdBy = userRepository.findById(taskDto.getCreatedBy().getId());
-        }
-
-        User assignedTo = null;
-        if (taskDto.getAssignedTo() != null && taskDto.getAssignedTo().getId() != null) {
-            assignedTo = userRepository.findById(taskDto.getAssignedTo().getId());
-        }
-
-        Task task = new Task();
-        if (taskDto.getId() != null) {
-            task.setId(taskDto.getId());
-        }
-        task.setTitle(taskDto.getTitle());
-        task.setDescription(taskDto.getDescription());
-        task.setDueDate(taskDto.getDueDate());
-        task.setCreatedBy(createdBy);
-        task.setAssignedTo(assignedTo);
-        task.setStatus(taskDto.getStatus());
-        task.setPriority(taskDto.getPriority());
-        task.setCreated_at(taskDto.getCreatedAt());
-        task.setUpdated_at(taskDto.getUpdatedAt());
-
-        return task;
     }
 
     @Override

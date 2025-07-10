@@ -3,7 +3,6 @@ package com.manager.task_manager.services.implementations;
 import com.manager.task_manager.domains.User;
 import com.manager.task_manager.domains.enums.UserRoles;
 import com.manager.task_manager.exceptions.EtBadRequestException;
-import com.manager.task_manager.exceptions.EtConflictException;
 import com.manager.task_manager.exceptions.EtResourceNotFoundException;
 import com.manager.task_manager.repositories.RegistrationRepository;
 import com.manager.task_manager.services.interfaces.RegistrationService;

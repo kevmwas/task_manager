@@ -1,7 +1,6 @@
 package com.manager.task_manager.services.interfaces;
 
 import com.manager.task_manager.domains.User;
-import com.manager.task_manager.exceptions.EtAuthException;
 import com.manager.task_manager.exceptions.EtBadRequestException;
 
 public interface RegistrationService {

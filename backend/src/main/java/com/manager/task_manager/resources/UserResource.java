@@ -1,7 +1,6 @@
 package com.manager.task_manager.resources;
 
 import com.manager.task_manager.domains.User;
-import com.manager.task_manager.domains.enums.UserRoles;
 import com.manager.task_manager.services.interfaces.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;

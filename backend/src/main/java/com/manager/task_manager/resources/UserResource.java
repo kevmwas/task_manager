@@ -17,6 +17,7 @@ import java.util.Map;
 @RequestMapping("/v1")
 public class UserResource {
     @Autowired
+    public
     UserService userService;
 
     @PostMapping("/add-user")

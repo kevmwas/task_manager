@@ -1,0 +1,255 @@
+{
+	"info": {
+		"_postman_id": "22d897cc-d879-4dd7-8024-3f3e7bee07d7",
+		"name": "task manager",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "28932865",
+		"_collection_link": "https://gold-rocket-252993.postman.co/workspace/saboja~1551df44-becf-4a4c-a36c-c716b2ce504c/collection/28932865-22d897cc-d879-4dd7-8024-3f3e7bee07d7?action=share&source=collection_link&creator=28932865"
+	},
+	"item": [
+		{
+			"name": "register",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"first_name\": \"kelvin\",\r\n    \"last_name\": \"mwangi\",\r\n    \"email\": \"mwas@mail.com\",\r\n    \"phone\": \"124513\",\r\n    \"password\": \"qwerty\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:5700/register",
+					"host": [
+						"localhost"
+					],
+					"port": "5700",
+					"path": [
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "login",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    // \"identifier\": \"kev@mail.com\",\r\n    \"identifier\": \"louis10makobo20@gmail.com\",\r\n    \"password\": \"qwerty\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:5700/login",
+					"host": [
+						"localhost"
+					],
+					"port": "5700",
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "add user",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE3NTE5NzE0NTIsImV4cCI6MTc1NDU2MzQ1MiwiaWQiOiJSdFpNUzVxdWwzVTJXL096M3BVaDdBPT0iLCJmaXJzdF9uYW1lIjoiTE9VSVMiLCJsYXN0X25hbWUiOiJNQUtPQk8iLCJwaG9uZSI6IjA3MjM1MDM0MjQiLCJlbWFpbCI6ImxvdWlzMTBtYWtvYm8yMEBnbWFpbC5jb20iLCJwcm9maWxlIjoiZGVmYXVsdC5wbmciLCJyb2xlIjoiYWRtaW4ifQ.YRKN49oHo0fWJ4pwmjd3nLprUsH7qvK9vjDshpi4VJEAdQgK-_a35pgp3h8FPtCjwMCJav5ACeLkfOKcJwN7Dg",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": " {\r\n    \"first_name\": \"John\",\r\n    \"last_name\": \"Doe\",\r\n    \"email\": \"john@example.com\",\r\n    \"password\": \"Password123!\",\r\n    \"phone\": \"+12452267890\",\r\n    \"id_no\": \"ID1345226\",\r\n    \"bio\": \"A short bio about John Doe.\",\r\n    \"gender\": \"male\",\r\n    \"dob\": \"1990-01-01\",\r\n    \"country\": \"USA\",\r\n    \"county\": \"Los Angeles\",\r\n    \"location\": \"123 Main St\",\r\n    \"city\": \"Los Angeles\",\r\n    \"profile\": \"profile.jpg\",\r\n    \"role\": \"user\"\r\n  }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:5700/v1/add-user",
+					"host": [
+						"localhost"
+					],
+					"port": "5700",
+					"path": [
+						"v1",
+						"add-user"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "all users",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE3NTE5MjkzMjIsImV4cCI6MTc1NDUyMTMyMiwiaWQiOiJSdFpNUzVxdWwzVTJXL096M3BVaDdBPT0iLCJmaXJzdF9uYW1lIjoiTE9VSVMiLCJsYXN0X25hbWUiOiJNQUtPQk8iLCJwaG9uZSI6IjA3MjM1MDM0MjQiLCJlbWFpbCI6ImxvdWlzMTBtYWtvYm8yMEBnbWFpbC5jb20iLCJwcm9maWxlIjoiZGVmYXVsdC5wbmciLCJyb2xlIjoiYWRtaW4ifQ.H7zSuXHpIUwJ8_AX4E9q5eEVau87kaNKUs8rrpvpMl-Tcj1O7pzsg8af_O5T_11ns8-WcY0m6_VlpJjjTl2rvg",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": " {\r\n    \"first_name\": \"John\",\r\n    \"last_name\": \"Doe\",\r\n    \"email\": \"john.doe@example.com\",\r\n    \"password\": \"Password123!\",\r\n    \"phone\": \"+1234567890\",\r\n    \"id_no\": \"ID123456\",\r\n    \"bio\": \"A short bio about John Doe.\",\r\n    \"gender\": \"male\",\r\n    \"dob\": \"1990-01-01\",\r\n    \"country\": \"USA\",\r\n    \"county\": \"Los Angeles\",\r\n    \"location\": \"123 Main St\",\r\n    \"city\": \"Los Angeles\",\r\n    \"profile\": \"profile.jpg\",\r\n    \"role\": \"user\"\r\n  }"
+				},
+				"url": {
+					"raw": "localhost:5700/v1/all-users",
+					"host": [
+						"localhost"
+					],
+					"port": "5700",
+					"path": [
+						"v1",
+						"all-users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "add task",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    // \"identifier\": \"kev@mail.com\",\r\n    \"identifier\": \"louis10makobo20@gmail.com\",\r\n    \"password\": \"qwerty\"\r\n}"
+				},
+				"url": {
+					"raw": "localhost:5700/login",
+					"host": [
+						"localhost"
+					],
+					"port": "5700",
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "my tasks",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE3NTIwOTc1NzQsImV4cCI6MTc1NDY4OTU3NCwiaWQiOiI1clJNUklJaURSVmVLK0IvdGFpdG5RPT0iLCJmaXJzdF9uYW1lIjoia2VsdmluIiwibGFzdF9uYW1lIjoibXdhbmdpIiwicGhvbmUiOiIxMjQ1MTMiLCJlbWFpbCI6Im13YXNAbWFpbC5jb20iLCJwcm9maWxlIjoiZGVmYXVsdC5wbmciLCJyb2xlIjoidXNlciJ9.YMV-qvU3-1V1oF2tuStf-8Gl881bRWGlDe0ElflIyVjbuNUIODJHpIR4Z125SFcFuviUptOWJHQMtZW7TDThaw",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:5700/v1/my-tasks",
+					"host": [
+						"localhost"
+					],
+					"port": "5700",
+					"path": [
+						"v1",
+						"my-tasks"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "my tasks",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE3NTIwOTc1NzQsImV4cCI6MTc1NDY4OTU3NCwiaWQiOiI1clJNUklJaURSVmVLK0IvdGFpdG5RPT0iLCJmaXJzdF9uYW1lIjoia2VsdmluIiwibGFzdF9uYW1lIjoibXdhbmdpIiwicGhvbmUiOiIxMjQ1MTMiLCJlbWFpbCI6Im13YXNAbWFpbC5jb20iLCJwcm9maWxlIjoiZGVmYXVsdC5wbmciLCJyb2xlIjoidXNlciJ9.YMV-qvU3-1V1oF2tuStf-8Gl881bRWGlDe0ElflIyVjbuNUIODJHpIR4Z125SFcFuviUptOWJHQMtZW7TDThaw",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:5700/v1/task-count/TODO",
+					"host": [
+						"localhost"
+					],
+					"port": "5700",
+					"path": [
+						"v1",
+						"task-count",
+						"TODO"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE3NTIwOTM0MDQsImV4cCI6MTc1NDY4NTQwNCwiaWQiOiJSdFpNUzVxdWwzVTJXL096M3BVaDdBPT0iLCJmaXJzdF9uYW1lIjoiTE9VSVMiLCJsYXN0X25hbWUiOiJNQUtPQk8iLCJwaG9uZSI6IjA3MjM1MDM0MjQiLCJlbWFpbCI6ImxvdWlzMTBtYWtvYm8yMEBnbWFpbC5jb20iLCJwcm9maWxlIjoiZGVmYXVsdC5wbmciLCJyb2xlIjoiYWRtaW4ifQ.KG8vV2c_0yDlkAEvKAnixCqBvAJddwTGDBYYqIRQgH5MV1iTDbZPsWYfwGAx7ZwKIzPvxUfppS8AH5nICYn3cw",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}

@@ -1,5 +1,6 @@
 package com.manager.task_manager.domains;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.manager.task_manager.domains.enums.TaskPriority;
 import com.manager.task_manager.domains.enums.TaskStatus;
 import jakarta.persistence.*;
@@ -31,18 +32,17 @@ public class Task {
 
     @NotNull
     @NotBlank(message = "due date cannot be blank")
-    private String due_date;
+    private String dueDate;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "created_by", nullable = false)
     @NotNull(message = "created by cannot be blank")
     private User createdBy;
 
-    @NotNull
-    @ManyToOne(fetch = FetchType.LAZY)
-    @NotBlank(message = "assigned to cannot be blank")
+    @NotNull(message = "assigned to by cannot be blank")
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "assigned_to", nullable = false)
-    private User assigned_to;
+    private User assignedTo;
 
     @Column(nullable = true, updatable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private LocalDateTime created_at;
@@ -50,13 +50,13 @@ public class Task {
     @Column(nullable = true, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private LocalDateTime updated_at;
 
-    public Task(Long id, String title, String description, String due_date, LocalDateTime created_at, LocalDateTime updated_at) {
+    public Task(Long id, String title, String description, String dueDate, LocalDateTime created_at, LocalDateTime updated_at) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.status = TaskStatus.TODO;
         this.priority = TaskPriority.LOW;
-        this.due_date = due_date;
+        this.dueDate = dueDate;
         this.created_at = created_at;
         this.updated_at = updated_at;
     }
@@ -98,12 +98,12 @@ public class Task {
         this.priority = priority;
     }
 
-    public String getDue_date() {
-        return due_date;
+    public String getDueDate() {
+        return dueDate;
     }
 
-    public void setDue_date(String due_date) {
-        this.due_date = due_date;
+    public void setDueDate(String dueDate) {
+        this.dueDate = dueDate;
     }
 
     public String getTitle() {
@@ -114,12 +114,12 @@ public class Task {
         this.title = title;
     }
 
-    public User getAssigned_to() {
-        return assigned_to;
+    public User getAssignedTo() {
+        return assignedTo;
     }
 
-    public void setAssigned_to(User assigned_to) {
-        this.assigned_to = assigned_to;
+    public void setAssignedTo(User assignedTo) {
+        this.assignedTo = assignedTo;
     }
 
     public User getCreatedBy() {

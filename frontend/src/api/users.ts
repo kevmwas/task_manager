@@ -39,7 +39,6 @@ export const getUsers = async () => {
       return data.data;
     })
     .catch((error) => {
-      console.log(error)
-     // catchError(error);
+     catchError(error);
     });
 };

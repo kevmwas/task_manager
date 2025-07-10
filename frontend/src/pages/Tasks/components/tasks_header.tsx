@@ -2,12 +2,17 @@ import Input from "../../../components/form/input/InputField";
 import Label from "../../../components/form/Label";
 import { Modal } from "../../../components/ui/modal";
 import { useModal } from "../../../hooks/useModal";
+import { newTask } from "../../../api/tasks";
 
 const TaskHeader = ({ users, counts, isActive }) => {
   const { isOpen, openModal, closeModal } = useModal();
 
-  const addtask = (event: any) => {
+  const addtask = async (event: any) => {
+    event.preventDefault();
 
+    await newTask(event);
+
+    closeModal();
   }
 
   const userData = JSON.parse(localStorage.getItem("user_data"));
@@ -16,7 +21,8 @@ const TaskHeader = ({ users, counts, isActive }) => {
     <div className="flex flex-col w-full gap-4 sm:justify-between xl:flex-row xl:items-center">
       <div className="grid grid-cols-2 sm:grid-cols-5 items-center gap-x-1 gap-y-2 rounded-lg bg-gray-100 p-0.5 dark:bg-gray-900">
         <button onClick={() => {}} className={`inline-flex items-center xl:justify-start justify-center gap-2 px-4 py-2 text-sm font-medium rounded-md group hover:text-gray-900 dark:hover:text-white ${!isActive ? "text-gray-900 dark:text-white bg-white dark:bg-gray-800" : "dark:text-gray-400"}`}>All Tasks
-          <span className="inline-flex rounded-full px-2 py-0.5 text-xs font-medium leading-normal group-hover:bg-brand-50 group-hover:text-brand-500 dark:group-hover:bg-brand-500/15 dark:group-hover:text-brand-400 text-brand-500 dark:text-brand-400 bg-brand-50 dark:bg-brand-500/15">{counts.total}
+          <span className="inline-flex rounded-full px-2 py-0.5 text-xs font-medium leading-normal group-hover:bg-brand-50 group-hover:text-brand-500 dark:group-hover:bg-brand-500/15 dark:group-hover:text-brand-400 text-brand-500 dark:text-brand-400 bg-brand-50 dark:bg-brand-500/15">
+            {counts.in_progress + counts.completed + counts.to_do + counts.cancelled}
           </span>
         </button>
         <button onClick={() => {}} className={`inline-flex items-center xl:justify-start justify-center gap-2 px-4 py-2 text-sm font-medium rounded-md group hover:text-gray-900 dark:hover:text-white ${isActive ? "text-gray-900 dark:text-white bg-white dark:bg-gray-800" : "dark:text-gray-400"}`}>To do

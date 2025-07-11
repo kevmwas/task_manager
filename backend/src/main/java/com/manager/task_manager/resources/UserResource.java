@@ -1,6 +1,9 @@
 package com.manager.task_manager.resources;
 
 import com.manager.task_manager.domains.User;
+import com.manager.task_manager.domains.dto.UserDto;
+import com.manager.task_manager.domains.dto.UserUpdateDto;
+import com.manager.task_manager.exceptions.EtBadRequestException;
 import com.manager.task_manager.services.interfaces.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,14 +48,27 @@ public class UserResource {
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
-    @PatchMapping("/update-user")
-    public ResponseEntity<Map<String, Boolean>> updateUser(HttpServletRequest request,
-                                                           @RequestBody User user) {
-        String role = (String) request.getAttribute("role");
-        userService.updateUser(role, user);
-        Map<String, Boolean> map = new HashMap<>();
-        map.put("User successfully updated", true);
-        return new ResponseEntity<>(map, HttpStatus.OK);
+    @PatchMapping("/update-user/{id}")
+    public ResponseEntity<UserDto> updateUser(@PathVariable Long id, HttpServletRequest request, @RequestBody UserUpdateDto userUpdateDto) {
+        try {
+            String role = (String) request.getAttribute("role");
+            UserDto updatedUser = userService.updateUser(role, id, userUpdateDto);
+            return ResponseEntity.ok(updatedUser);
+        } catch (EtBadRequestException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null); // Or return an error message DTO
+        }
+    }
+
+    @GetMapping("/my-profile")
+    public ResponseEntity<User> getMe(HttpServletRequest request) {
+        int id = (Integer) request.getAttribute("id");
+        User user = userService.findMe((long) id);
+
+        user.setPassword(null);
+        user.setOtp_code(null);
+        user.setOtp_expiration(null);
+
+        return new ResponseEntity<>(user, HttpStatus.OK);
     }
 //
 //    @PatchMapping("/update-self")
@@ -65,16 +81,7 @@ public class UserResource {
 //        return new ResponseEntity<>(map, HttpStatus.OK);
 //    }
 
-//    @PatchMapping("/update-password")
-//    public ResponseEntity<Map<String, Boolean>> updateUserPwd(HttpServletRequest request,
-//                                                              @RequestBody Users users) {
-//        int userId = (Integer) request.getAttribute("user_id");
-//        String role = (String) request.getAttribute("role");
-//        userService.updateUserPassword(userId, role, users);
-//        Map<String, Boolean> map = new HashMap<>();
-//        map.put("User password updated successfully", true);
-//        return new ResponseEntity<>(map, HttpStatus.OK);
-//    }
+
 //
 //    @PatchMapping("/update-self-password")
 //    public ResponseEntity<Map<String, Boolean>> updateSelfPwd(HttpServletRequest request,

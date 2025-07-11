@@ -1,6 +1,8 @@
 package com.manager.task_manager.services.interfaces;
 
 import com.manager.task_manager.domains.User;
+import com.manager.task_manager.domains.dto.UserDto;
+import com.manager.task_manager.domains.dto.UserUpdateDto;
 import com.manager.task_manager.exceptions.EtBadRequestException;
 
 import java.util.List;
@@ -10,5 +12,7 @@ public interface UserService {
 
     List<User> allUsers(String role) throws EtBadRequestException;
 
-    void updateUser(String role, User user) throws EtBadRequestException;
+    User findMe(Long id);
+
+    UserDto updateUser(String role, Long id, UserUpdateDto userUpdateDto) throws EtBadRequestException;
 }

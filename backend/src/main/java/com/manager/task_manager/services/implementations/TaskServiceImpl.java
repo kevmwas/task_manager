@@ -6,6 +6,7 @@ import com.manager.task_manager.domains.dto.TaskDto;
 import com.manager.task_manager.domains.dto.UserDto;
 import com.manager.task_manager.domains.enums.TaskStatus;
 import com.manager.task_manager.exceptions.EtBadRequestException;
+import com.manager.task_manager.exceptions.EtResourceNotFoundException;
 import com.manager.task_manager.repositories.TaskRepository;
 import com.manager.task_manager.repositories.UserRepository;
 import com.manager.task_manager.services.interfaces.TaskService;
@@ -13,6 +14,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -53,11 +55,10 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public List<TaskDto> fndMyTasks(Long assigned_to) throws EtBadRequestException {
         try {
-            return taskRepository.findAll().stream()
+            return taskRepository.findByAssignedTo_Id(assigned_to).stream()
                     .map(this::convertToDto)
                     .collect(Collectors.toList());
         } catch (Exception error) {
-            System.out.println("the error" + error);
             throw new EtBadRequestException("Invalid details. Failed to find my tasks");
         }
     }
@@ -76,11 +77,6 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public Task updateTask(Task task) throws EtBadRequestException {
-        return null;
-    }
-
-    @Override
     public long countMineByStatus(TaskStatus status, Long assignedToId) throws EtBadRequestException {
         try {
             return taskRepository.countTaskByStatusAndAssignedTo_Id(status, assignedToId);
@@ -88,6 +84,44 @@ public class TaskServiceImpl implements TaskService {
             System.out.println("the error is here" + error);
             throw new EtBadRequestException("Invalid details. Failed to get task count");
         }
+    }
+
+    @Override
+    public TaskDto updateTask(Long id, TaskDto taskDto) throws EtBadRequestException {
+        Task existingTask = taskRepository.findById(id);
+        if(existingTask == null) throw new EtResourceNotFoundException("Task not found");
+
+        if (taskDto.getTitle() != null) existingTask.setTitle(taskDto.getTitle());
+
+        if (taskDto.getDescription() != null) existingTask.setDescription(taskDto.getDescription());
+
+        if (taskDto.getDueDate() != null) existingTask.setDueDate(taskDto.getDueDate());
+
+        if (taskDto.getStatus() != null) existingTask.setStatus(taskDto.getStatus());
+
+        if (taskDto.getPriority() != null) existingTask.setPriority(taskDto.getPriority());
+
+        if (taskDto.getAssignedTo() != null) {
+            Long assignedToId = taskDto.getAssignedTo().getId();
+            if (assignedToId != null) {
+                User assignedUser = userRepository.findById(assignedToId);
+                if (assignedUser != null) {
+                    existingTask.setAssignedTo(assignedUser);
+                } else {
+                    throw new EtBadRequestException("Assigned user not found");
+                }
+            }
+        }
+
+        existingTask.setUpdated_at(LocalDateTime.now());
+
+        Task updatedTask = taskRepository.save(existingTask);
+        return convertToDto(updatedTask);
+    }
+
+    @Override
+    public void deleteTask(Long id) throws EtBadRequestException {
+
     }
 
 //    @Override

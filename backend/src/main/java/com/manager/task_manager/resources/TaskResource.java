@@ -4,6 +4,7 @@ import com.manager.task_manager.domains.Task;
 import com.manager.task_manager.domains.User;
 import com.manager.task_manager.domains.dto.TaskDto;
 import com.manager.task_manager.domains.enums.TaskStatus;
+import com.manager.task_manager.exceptions.EtBadRequestException;
 import com.manager.task_manager.services.interfaces.TaskService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,21 +59,14 @@ public class TaskResource {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @PatchMapping("/update-task")
-    public ResponseEntity<Map<String, Object>> updateTask(HttpServletRequest request, @RequestBody Task task) {
-
-        taskService.updateTask(task);
-
-        Map<String, Object> filteredTask = new HashMap<>();
-        filteredTask.put("title", task.getTitle());
-        filteredTask.put("description", task.getDescription());
-        filteredTask.put("status", task.getStatus());
-        filteredTask.put("priority", task.getPriority());
-        filteredTask.put("due_date", task.getDueDate());
-
-        Map<String, Object> response = new HashMap<>();
-        response.put("task", filteredTask);
-        return new ResponseEntity<>(response, HttpStatus.OK);
+    @PatchMapping("/update-task/{id}")
+    public ResponseEntity<TaskDto> updateTask(@PathVariable Long id, @RequestBody TaskDto taskDto) {
+        try {
+            TaskDto updatedTask = taskService.updateTask(id, taskDto);
+            return ResponseEntity.ok(updatedTask);
+        } catch (EtBadRequestException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
     }
 
     @GetMapping("/my-tasks")

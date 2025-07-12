@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import PageBreadcrumb from "../../components/common/PageBreadCrumb";
 import PageMeta from "../../components/common/PageMeta";
-import BasicTableOne from "../../components/tables/BasicTables/BasicTableOne";
+import UsersTable from "./components/users_table";
 import { Modal } from "../../components/ui/modal";
 import { useModal } from "../../hooks/useModal";
-import { getUsers, newUser } from "../../api/users";
+import { getUsers } from "../../api/users";
 import Skeleton from "../../components/ui/skeleton";
-import AddUser from "./add_user";
+import AddUser from "./components/add_user";
 
 const Users = () => {
   const { isOpen, openModal, closeModal } = useModal();
@@ -59,14 +59,14 @@ const Users = () => {
         </div>
         <div className="p-4 space-y-8 border-t border-gray-200 mt-7 dark:border-gray-800 sm:mt-0 xl:p-6">
           <div>
-            {users.length ? isAdmin ? <BasicTableOne data={allAdmins} /> : <BasicTableOne data={allUsers} /> : <Skeleton />}
+            {users.length ? isAdmin ? <UsersTable data={allAdmins} /> : <UsersTable data={allUsers} /> : <Skeleton />}
           </div>
         </div>
       </div>
       </div>
 
       <Modal isOpen={isOpen} onClose={closeModal} className="max-w-[700px] p-6 lg:p-10">
-        <AddUser close={closeModal} />
+        <AddUser close={closeModal} user={{}} isEdit={false} />
       </Modal>
     </>
   );

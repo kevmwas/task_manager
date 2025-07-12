@@ -5,21 +5,24 @@ import TaskHeader from "./components/tasks_header";
 import { getUsers } from "../../api/users";
 import { getMyTasks, getMyTasksCount } from "../../api/tasks";
 import TaskListFlow from "./components/task_list";
+import { useModal } from "../../hooks/useModal";
+import TaskModal from "./components/task_modal";
 
 const TasksList = () => {
+  const { isOpen, openModal, closeModal } = useModal();
   const [users, setUsers] = useState([]);
-  const [isActive, setIsActive] = useState(false);
   const [tasks, setTasks] = useState([]);
   const [count, setCount] = useState({ to_do: 0, in_progress: 0, completed: 0, cancelled: 0 });
+  const [activeTask, setActiveTask] = useState({});
 
-  const userData = JSON.parse(localStorage.getItem("user_data"));
-  
+  const userDataString = localStorage.getItem("user_data");
+  const userData = userDataString ? JSON.parse(userDataString) : {};
+
   useEffect(() => {
     if(userData.role === "admin") {
       const fetchUsers = async () => {
         const users = await getUsers();
-        const allUsers = users.filter((user: any) => user.role === "user");
-        setUsers(allUsers);
+        setUsers(users);
       }
       
       fetchUsers();
@@ -62,7 +65,7 @@ const TasksList = () => {
       <PageBreadcrumb pageTitle="Tasks list" />
       <div className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] lg:p-6">
         <div className="flex flex-col items-center px-4 py-5 xl:px-6 xl:py-6">
-          <TaskHeader users={users.length ? users : []} counts={count} isActive={isActive} />
+          <TaskHeader users={users.length ? users : []} counts={count} />
         </div>
         <div className="p-4 space-y-8 border-t border-gray-200 mt-7 dark:border-gray-800 sm:mt-0 xl:p-6">
           <div>
@@ -79,7 +82,7 @@ const TasksList = () => {
               </div>
             </div>
             {todoTasks ? todoTasks.map((item, index) => {
-              return <TaskListFlow task={item} key={index} />
+              return <TaskListFlow task={item} key={index} modal={() => {openModal(); setActiveTask(item)}} />
             }) : "no available tasks to do"}
           </div>
           <div>
@@ -96,7 +99,7 @@ const TasksList = () => {
               </div>
             </div>
             {inProgressTasks ? inProgressTasks.map((item, index) => {
-              return <TaskListFlow task={item} key={index} />
+              return <TaskListFlow task={item} key={index} modal={() => {openModal(); setActiveTask(item)}} />
             }) : "no available tasks in progress"}
           </div>
           <div>
@@ -113,7 +116,7 @@ const TasksList = () => {
               </div>
             </div>
             {completedTasks ? completedTasks.map((item, index) => {
-              return <TaskListFlow task={item} key={index} />
+              return <TaskListFlow task={item} key={index} modal={() => {openModal(); setActiveTask(item)}} />
             }) : "no tasks completed"}
           </div>
           <div>
@@ -130,11 +133,12 @@ const TasksList = () => {
               </div>
             </div>
             {cancelledTasks ? cancelledTasks.map((item, index) => {
-              return <TaskListFlow task={item} key={index} />
+              return <TaskListFlow task={item} key={index} modal={() => {openModal(); setActiveTask(item)}} />
             }) : "no cancelled tasks"}
           </div>
         </div>
       </div>
+      <TaskModal isOpen={isOpen} closeModal={closeModal} isEdit={true} task={activeTask} users={users} />
     </>
   );
 }

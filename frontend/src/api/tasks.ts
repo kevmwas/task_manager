@@ -1,10 +1,20 @@
 import axios from "axios";
 import { catchError, Config, headers } from "./config";
-// const userData = JSON.parse(localStorage.getItem("user_data"));
 
 export const newTask = async (data: any) => {
   return await axios
     .post(Config.TASKS.ADD_TASK, data, headers)
+    .then((data) => {
+      return { status: 200, data: data.data };
+    })
+    .catch((error) => {
+     catchError(error);
+    });
+};
+
+export const updateTask = async (data: any, params: Number) => {
+  return await axios
+    .patch(`${Config.TASKS.UPDATE_TASK}/${params}`, data, headers)
     .then((data) => {
       return { status: 200, data: data.data };
     })

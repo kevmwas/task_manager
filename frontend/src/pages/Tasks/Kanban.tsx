@@ -5,21 +5,24 @@ import TaskHeader from "./components/tasks_header";
 import { getUsers } from "../../api/users";
 import { getMyTasks, getMyTasksCount } from "../../api/tasks";
 import KanbanList from "./components/kanban_list";
+import { useModal } from "../../hooks/useModal";
+import TaskModal from "./components/task_modal";
 
 const KanBanTasks = () => {
+  const { isOpen, openModal, closeModal } = useModal();
   const [users, setUsers] = useState([]);
-  const [isActive, setIsActive] = useState(false);
   const [tasks, setTasks] = useState([]);
   const [count, setCount] = useState({ to_do: 0, in_progress: 0, completed: 0, cancelled: 0 });
+  const [activeTask, setActiveTask] = useState({});
 
-  const userData = JSON.parse(localStorage.getItem("user_data"));
+  const userDataString = localStorage.getItem("user_data");
+  const userData = userDataString ? JSON.parse(userDataString) : {};
   
   useEffect(() => {
     if(userData.role === "admin") {
       const fetchUsers = async () => {
         const users = await getUsers();
-        const allUsers = users.filter((user: any) => user.role === "user");
-        setUsers(allUsers);
+        setUsers(users);
       }
       
       fetchUsers();
@@ -62,7 +65,7 @@ const KanBanTasks = () => {
       <PageBreadcrumb pageTitle="Tasks list" />
       <div className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] lg:p-6">
         <div className="flex flex-col items-center px-4 py-5 xl:px-6 xl:py-6">
-          <TaskHeader users={users.length ? users : []} counts={count} isActive={isActive} />
+          <TaskHeader users={users.length ? users : []} counts={count} />
         </div>
         <div className="grid grid-cols-1 border-t border-gray-200 divide-x divide-gray-200 dark:divide-white/[0.05] mt-7 dark:border-white/[0.05] sm:mt-0 sm:grid-cols-2 xl:grid-cols-4">
           <div className="flex flex-col gap-5 p-4 swim-lane xl:p-6">
@@ -78,7 +81,7 @@ const KanBanTasks = () => {
               </div>
             </div>
             {todoTasks ? todoTasks.map((item, index) => {
-              return <KanbanList task={item} key={index} />
+              return <KanbanList task={item} key={index} modal={() => {openModal(); setActiveTask(item)}} />
             }) : "no available tasks to do"}
           </div>
           <div className="flex flex-col gap-5 p-4 swim-lane xl:p-6">
@@ -94,7 +97,7 @@ const KanBanTasks = () => {
               </div>
             </div>
             {inProgressTasks ? inProgressTasks.map((item, index) => {
-              return <KanbanList task={item} key={index} />
+              return <KanbanList task={item} key={index} modal={() => {openModal(); setActiveTask(item)}} />
             }) : "no available tasks in progress"}
           </div>
           <div className="flex flex-col gap-5 p-4 swim-lane xl:p-6">
@@ -110,7 +113,7 @@ const KanBanTasks = () => {
               </div>
             </div>
             {completedTasks ? completedTasks.map((item, index) => {
-              return <KanbanList task={item} key={index} />
+              return <KanbanList task={item} key={index} modal={() => {openModal(); setActiveTask(item)}} />
             }) : "no tasks completed"}
           </div>
           <div className="flex flex-col gap-5 p-4 swim-lane xl:p-6">
@@ -126,11 +129,12 @@ const KanBanTasks = () => {
               </div>
             </div>
             {cancelledTasks ? cancelledTasks.map((item, index) => {
-              return <KanbanList task={item} key={index} />
-            }) : "no tasks cancelled"}
+              return <KanbanList task={item} key={index} modal={() => {openModal(); setActiveTask(item)}} />
+            }) : "no cancelled tasks"}
           </div>
         </div>
       </div>
+      <TaskModal isOpen={isOpen} closeModal={closeModal} isEdit={true} task={activeTask} users={users} />
     </>
   );
 }

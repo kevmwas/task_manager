@@ -88,35 +88,39 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public TaskDto updateTask(Long id, TaskDto taskDto) throws EtBadRequestException {
-        Task existingTask = taskRepository.findById(id);
-        if(existingTask == null) throw new EtResourceNotFoundException("Task not found");
+        try {
+            Task existingTask = taskRepository.findById(id);
+            if(existingTask == null) throw new EtResourceNotFoundException("Task not found");
 
-        if (taskDto.getTitle() != null) existingTask.setTitle(taskDto.getTitle());
+            if (taskDto.getTitle() != null) existingTask.setTitle(taskDto.getTitle());
 
-        if (taskDto.getDescription() != null) existingTask.setDescription(taskDto.getDescription());
+            if (taskDto.getDescription() != null) existingTask.setDescription(taskDto.getDescription());
 
-        if (taskDto.getDueDate() != null) existingTask.setDueDate(taskDto.getDueDate());
+            if (taskDto.getDueDate() != null) existingTask.setDueDate(taskDto.getDueDate());
 
-        if (taskDto.getStatus() != null) existingTask.setStatus(taskDto.getStatus());
+            if (taskDto.getStatus() != null) existingTask.setStatus(taskDto.getStatus());
 
-        if (taskDto.getPriority() != null) existingTask.setPriority(taskDto.getPriority());
+            if (taskDto.getPriority() != null) existingTask.setPriority(taskDto.getPriority());
 
-        if (taskDto.getAssignedTo() != null) {
-            Long assignedToId = taskDto.getAssignedTo().getId();
-            if (assignedToId != null) {
-                User assignedUser = userRepository.findById(assignedToId);
-                if (assignedUser != null) {
-                    existingTask.setAssignedTo(assignedUser);
-                } else {
-                    throw new EtBadRequestException("Assigned user not found");
+            if (taskDto.getAssignedTo() != null) {
+                Long assignedToId = taskDto.getAssignedTo().getId();
+                if (assignedToId != null) {
+                    User assignedUser = userRepository.findById(assignedToId);
+                    if (assignedUser != null) {
+                        existingTask.setAssignedTo(assignedUser);
+                    } else {
+                        throw new EtBadRequestException("Assigned user not found");
+                    }
                 }
             }
+
+            existingTask.setUpdated_at(LocalDateTime.now());
+
+            Task updatedTask = taskRepository.save(existingTask);
+            return convertToDto(updatedTask);
+        } catch (Exception error) {
+            throw new EtBadRequestException("Error updating task");
         }
-
-        existingTask.setUpdated_at(LocalDateTime.now());
-
-        Task updatedTask = taskRepository.save(existingTask);
-        return convertToDto(updatedTask);
     }
 
     @Override

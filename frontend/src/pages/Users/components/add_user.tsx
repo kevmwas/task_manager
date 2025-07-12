@@ -1,17 +1,18 @@
-import Label from "../../components/form/Label";
-import Input from "../../components/form/input/InputField";
-import { Formik, Form, Field, ErrorMessage } from "formik";
+import Label from "../../../components/form/Label";
+import Input from "../../../components/form/input/InputField";
+import { Formik, Form } from "formik";
 import * as Yup from "yup";
-import { EyeCloseIcon, EyeIcon } from "../../icons";
+import { EyeCloseIcon, EyeIcon } from "../../../icons";
 import { useState } from "react";
-import { useModal } from "../../hooks/useModal";
-import { newUser } from "../../api/users";
+import { newUser, updateUser } from "../../../api/users";
 
 interface AddUserProps {
   close: () => void;
+  user: any;
+  isEdit: Boolean;
 }
 
-const AddUser: React.FC<AddUserProps> = ({ close }) => {
+const AddUser: React.FC<AddUserProps> = ({ close, user, isEdit }) => {
     const [showPassword, setShowPassword] = useState(false);
 
     interface TaskFormValues {
@@ -33,21 +34,42 @@ const AddUser: React.FC<AddUserProps> = ({ close }) => {
       }
 
     const initialValues: TaskFormValues = {
-        first_name: "",
-        last_name: "",
-        email: "",
-        phone: "",
-        id_no: "",
-        role: "user",
-        bio: "",
-        dob: "",
-        country: "",
-        county: "",
-        location: "",
-        city: "",
-        gender: "",
-        profile: null as File | null,
-        password: "",
+        ...(isEdit && user
+            ? {
+                first_name: user.first_name || "",
+                last_name: user.last_name || "",
+                email: user.email || "",
+                phone: user.phone || "",
+                id_no: user.id_no || "",
+                role: user.role || "user",
+                bio: user.bio || "",
+                dob: user.dob || "",
+                country: user.country || "",
+                county: user.county || "",
+                location: user.location || "",
+                city: user.city || "",
+                gender: user.gender || "",
+                profile: null as File | null,
+                password: "",
+              }
+            : {
+                first_name: "",
+                last_name: "",
+                email: "",
+                phone: "",
+                id_no: "",
+                role: "user",
+                bio: "",
+                dob: "",
+                country: "",
+                county: "",
+                location: "",
+                city: "",
+                gender: "",
+                profile: null as File | null,
+                password: "",
+              }
+        ),
     }
 
     const UserSchema = Yup.object({
@@ -67,7 +89,9 @@ const AddUser: React.FC<AddUserProps> = ({ close }) => {
         city: Yup.string(),
         gender: Yup.string().oneOf(["male", "female", "other", ""]).notRequired(),
         profile: Yup.mixed().notRequired(),
-        password: Yup.string().min(6, "Password must be at least 6 characters").required("Password is required"),
+        password: isEdit
+            ? Yup.string().notRequired()
+            : Yup.string().min(6, "Password must be at least 6 characters").required("Password is required"),
     });
     
     return (
@@ -92,7 +116,12 @@ const AddUser: React.FC<AddUserProps> = ({ close }) => {
                 role: values.role || "user"
               };
 
-              await newUser(data);
+              if(isEdit) {
+                await updateUser(data, user.id);
+              } else {
+                await newUser(data);
+              }
+              
               setSubmitting(false);
               resetForm();
               close();
@@ -317,38 +346,42 @@ const AddUser: React.FC<AddUserProps> = ({ close }) => {
                   <div className="text-error-500 text-xs mt-1">{errors.profile as string}</div>
                 )}
               </div>
-              <div>
-                <Label>Password</Label>
-                <div className="relative">
-                  <Input
-                    placeholder="Enter your password"
-                    name="password"
-                    type={showPassword ? "text" : "password"}
-                    value={values.password}
-                    onChange={handleChange}
-                  />
-                  <span
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute z-30 -translate-y-1/2 cursor-pointer right-4 top-1/2"
-                  >
-                    {showPassword ? (
-                      <EyeIcon className="fill-gray-500 dark:fill-gray-400 size-5" />
-                    ) : (
-                      <EyeCloseIcon className="fill-gray-500 dark:fill-gray-400 size-5" />
-                    )}
-                  </span>
-                </div>
-                {touched.password && errors.password && (
-                  <div className="text-error-500 text-xs mt-1">{errors.password}</div>
-                )}
-              </div>
+              {!isEdit ? 
+                <div>
+                  <Label>Password</Label>
+                  <div className="relative">
+                    <Input
+                      placeholder="Enter your password"
+                      name="password"
+                      type={showPassword ? "text" : "password"}
+                      value={values.password}
+                      onChange={handleChange}
+                    />
+                    <span
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="absolute z-30 -translate-y-1/2 cursor-pointer right-4 top-1/2"
+                    >
+                      {showPassword ? (
+                        <EyeIcon className="fill-gray-500 dark:fill-gray-400 size-5" />
+                      ) : (
+                        <EyeCloseIcon className="fill-gray-500 dark:fill-gray-400 size-5" />
+                      )}
+                    </span>
+                  </div>
+                  {touched.password && errors.password && (
+                    <div className="text-error-500 text-xs mt-1">{errors.password}</div>
+                  )}
+                </div> : ""
+              }
               <div>
                 <button
                   type="submit"
                   disabled={isSubmitting}
                   className="disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-gray-400 flex items-center justify-center w-full px-4 py-3 text-sm font-medium text-white transition rounded-lg bg-brand-500 shadow-theme-xs hover:bg-brand-600"
                 >
-                  {isSubmitting ? "Adding..." : "Add User"}
+                  {isSubmitting
+                    ? isEdit ? "Updating..." : "Adding..."
+                    : isEdit ? "Update User" : "Add User"}
                 </button>
               </div>
             </div>

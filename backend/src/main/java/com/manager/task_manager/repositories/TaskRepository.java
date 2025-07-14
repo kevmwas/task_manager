@@ -12,7 +12,7 @@ import java.util.List;
 public interface TaskRepository extends JpaRepository<Task, String> {
     Task save(Task task) throws EtBadRequestException;
     long countTaskByStatusAndAssignedTo_Id(TaskStatus status, Long assignedToId);
-    List<Task> findByAssignedTo_Id(Long assignedTo);
+    List<Task> findByAssignedTo_IdOrderByUpdatedAtDesc(Long assignedTo);
     Task findById(Long id);
     void deleteById(Long id);
 }

@@ -2,8 +2,9 @@ import { ErrorMessage, Form, Formik, FormikHelpers } from "formik";
 import { Modal } from "../../../components/ui/modal";
 import Label from "../../../components/form/Label";
 import * as Yup from "yup";
-import { newTask, updateTask } from "../../../api/tasks";
 import Input from "../../../components/form/input/InputField";
+import { useDispatch } from "react-redux";
+import { newTask, updateTask } from "../../../api/tasks";
 
 
 interface TaskModalProps {
@@ -18,6 +19,7 @@ const TaskModal = ({ isOpen, closeModal, isEdit, task, users }: TaskModalProps) 
 
     const userDataString = localStorage.getItem("user_data");
     const userData = userDataString ? JSON.parse(userDataString) : {};
+    const dispatch = useDispatch();
   
     interface TaskFormValues {
       title: string;
@@ -61,6 +63,7 @@ const TaskModal = ({ isOpen, closeModal, isEdit, task, users }: TaskModalProps) 
         <Modal isOpen={isOpen} onClose={closeModal} className="max-w-[700px] p-6 lg:p-10">
         <Formik initialValues={initialValues} validationSchema={TaskSchema} onSubmit={async ( values: TaskFormValues, { setSubmitting, resetForm }: FormikHelpers<TaskFormValues>) => {
             const data: any = {
+              id: task.id,
               title: values.title,
               description: values.description,
               status: values.status,
@@ -73,9 +76,12 @@ const TaskModal = ({ isOpen, closeModal, isEdit, task, users }: TaskModalProps) 
             }
 
             if(isEdit) {
-                await updateTask(data, task.id)
+              // @ts-ignore
+              dispatch(updateTask(data));
             } else {
-                await newTask(data);
+              delete data.id;
+              // @ts-ignore
+              dispatch(newTask(data));
             }
 
             setSubmitting(false);

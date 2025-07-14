@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { fetchUsers, updateUser } from "../../api/users";
+import { fetchUsers, newUser, updateUser } from "../../api/users";
 
 interface User {
   id: number;
@@ -56,36 +56,30 @@ export const userSlice = createSlice({
         state.loading = false;
         state.error = null;
       })
+      .addCase(newUser.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(newUser.fulfilled, (state, action) => {
+        state.loading = false;
+        if (action.payload && action.payload.data) {
+          state.value.push(action.payload.data);
+        }
+        state.error = null;
+      })
+      .addCase(newUser.rejected, (state) => {
+        state.loading = false;
+        state.error = null;
+      })
       .addCase(updateUser.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
       .addCase(updateUser.fulfilled, (state, action) => {
         state.loading = false;
-        // Update the user in state.value array
         const updatedUser = action.payload as unknown as User;
         state.value = state.value.map((user) =>
           user && updatedUser && 'id' in updatedUser && user.id === updatedUser.id ? updatedUser : user
         );
         state.error = null; })
 }});
-
-// Optionally, add to extraReducers to handle updateUserThunk
-// Example usage in userSlice (add inside extraReducers):
-//   .addCase(updateUserThunk.pending, (state) => {
-//     state.loading = true;
-//     state.error = null;
-//   })
-//   .addCase(updateUserThunk.fulfilled, (state, action) => {
-//     state.loading = false;
-//     // Update the user in state.value array
-//     const updatedUser = action.payload;
-//     state.value = state.value.map(user =>
-//       user.id === updatedUser.id ? updatedUser : user
-//     );
-//     state.error = null;
-//   })
-//   .addCase(updateUserThunk.rejected, (state, action) => {
-//     state.loading = false;
-//     state.error = action.error ? action.error : null;
-//   });

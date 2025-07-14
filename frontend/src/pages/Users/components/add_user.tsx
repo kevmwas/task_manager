@@ -5,6 +5,7 @@ import * as Yup from "yup";
 import { EyeCloseIcon, EyeIcon } from "../../../icons";
 import { useState } from "react";
 import { newUser, updateUser } from "../../../api/users";
+import { useDispatch } from "react-redux";
 
 interface AddUserProps {
   close: () => void;
@@ -14,6 +15,7 @@ interface AddUserProps {
 
 const AddUser: React.FC<AddUserProps> = ({ close, user, isEdit }) => {
     const [showPassword, setShowPassword] = useState(false);
+    const dispatch = useDispatch();
 
     interface TaskFormValues {
         first_name: string,
@@ -93,38 +95,47 @@ const AddUser: React.FC<AddUserProps> = ({ close, user, isEdit }) => {
             ? Yup.string().notRequired()
             : Yup.string().min(6, "Password must be at least 6 characters").required("Password is required"),
     });
-    
+
     return (
     <Formik
         initialValues={ initialValues }
         validationSchema= { UserSchema }
         onSubmit={async (values, { setSubmitting, resetForm }) => {
-            const data = {
-                first_name: values.first_name,
-                last_name: values.last_name,
-                email: values.email,
-                phone: values.phone,
-                password: values.password,
-                id_no: values.id_no,
-                bio: values.bio,
-                gender: values.gender,
-                dob: values.dob,
-                country: values.country,
-                county: values.county,
-                location: values.location,
-                city: values.city,
-                role: values.role || "user"
-              };
+            try {
+                const data = {
+                  id: user.id,
+                  first_name: values.first_name,
+                  last_name: values.last_name,
+                  email: values.email,
+                  phone: values.phone,
+                  password: values.password,
+                  id_no: values.id_no,
+                  bio: values.bio,
+                  gender: values.gender,
+                  dob: values.dob,
+                  country: values.country,
+                  county: values.county,
+                  location: values.location,
+                  city: values.city,
+                  role: values.role || "user"
+                };
 
-              if(isEdit) {
-                await updateUser(data, user.id);
-              } else {
-                await newUser(data);
-              }
-              
-              setSubmitting(false);
-              resetForm();
-              close();
+                if (isEdit) {
+                    // @ts-ignore
+                    dispatch(updateUser(data, user.id));
+                } else {
+                  delete data.id;
+                    // @ts-ignore
+                  dispatch(newUser(data));
+                }
+                
+                setSubmitting(false);
+                resetForm();
+                close();
+            } catch (error) {
+                // Optionally, handle error here (e.g., show a toast or set a form error)
+                console.error("Error submitting form:", error);
+            }
         }}
       >
         {({ values, errors, touched, handleChange, handleBlur, setFieldValue, isSubmitting }) => (

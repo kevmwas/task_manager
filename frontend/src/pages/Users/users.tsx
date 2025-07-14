@@ -45,8 +45,12 @@ const Users = () => {
   }, [dispatch]);
 
 
-  const allUsers = (users as User[]).filter((user) => user.role === "user");
-  const allAdmins = (users as User[]).filter((user) => user.role === "admin");
+  const allUsers = Array.isArray(users) && users.length > 0
+    ? (users as User[]).filter((user) => user.role === "user")
+    : [];
+  const allAdmins = Array.isArray(users) && users.length > 0
+    ? (users as User[]).filter((user) => user.role === "admin")
+    : [];
 
   return (
     <>
@@ -75,7 +79,7 @@ const Users = () => {
         </div>
         <div className="p-4 space-y-8 border-t border-gray-200 mt-7 dark:border-gray-800 sm:mt-0 xl:p-6">
           <div>
-            {users.length ? isAdmin ? <UsersTable data={allAdmins} /> : <UsersTable data={allUsers} /> : <Skeleton />}
+            {users && users.length ? isAdmin ? <UsersTable data={allAdmins} /> : <UsersTable data={allUsers} /> : <Skeleton />}
           </div>
         </div>
       </div>

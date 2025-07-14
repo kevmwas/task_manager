@@ -92,28 +92,27 @@ class UserResourceTests {
 
     @Test
     void testAddUser() {
-        User user = new User();
-        user.setFirst_name("John");
-        user.setLast_name("Doe");
-        user.setProfile("profile.png");
-        user.setGender("male");
-        user.setEmail("john.doe@example.com");
-        user.setRole(UserRoles.user);
+        User newUser = new User();
+        newUser.setFirst_name("Jane");
+        newUser.setLast_name("Doe");
+        newUser.setEmail("jane.doe@example.com");
+        newUser.setPhone("1234567890");
+        newUser.setPassword("password123");
+        newUser.setRole(UserRoles.user);
 
-        ResponseEntity<Map<String, Object>> response = userResource.addUser(user);
+        when(userService.addNewUser(any(User.class))).thenReturn(newUser);
 
-        verify(userService, times(1)).addNewUser(user);
-        assertThat(response.getStatusCode()).isEqualTo(200);
-        Map<String, Object> body = response.getBody();
-        assertThat(body).isNotNull();
-        assertThat(body.get("user")).isInstanceOf(Map.class);
-        Map<String, Object> filteredUser = (Map<String, Object>) body.get("user");
-        assertThat(filteredUser.get("first_name")).isEqualTo("John");
-        assertThat(filteredUser.get("last_name")).isEqualTo("Doe");
-        assertThat(filteredUser.get("profile")).isEqualTo("profile.png");
-        assertThat(filteredUser.get("gender")).isEqualTo("male");
-        assertThat(filteredUser.get("email")).isEqualTo("john.doe@example.com");
-        assertThat(filteredUser.get("role")).isEqualTo(UserRoles.user);
+        ResponseEntity<User> response = userResource.addUser(newUser);
+
+        verify(userService, times(1)).addNewUser(any(User.class));
+        assertThat(response.getStatusCode()).isEqualTo(201);
+        User returnedUser = response.getBody();
+        assertThat(returnedUser).isNotNull();
+        assertThat(returnedUser.getFirst_name()).isEqualTo("Jane");
+        assertThat(returnedUser.getLast_name()).isEqualTo("Doe");
+        assertThat(returnedUser.getEmail()).isEqualTo("jane.doe@example.com");
+        assertThat(returnedUser.getPhone()).isEqualTo("1234567890");
+        assertThat(returnedUser.getRole()).isEqualTo(UserRoles.user);
     }
 
     @Test

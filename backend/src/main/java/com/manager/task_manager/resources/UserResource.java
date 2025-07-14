@@ -10,10 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 
 @RestController
@@ -24,20 +21,11 @@ public class UserResource {
     UserService userService;
 
     @PostMapping("/add-user")
-    public ResponseEntity<Map<String, Object>> addUser(@RequestBody User user) {
-        userService.addNewUser(user);
+    public ResponseEntity<User> addUser(@RequestBody User user) {
+        User newUser = userService.addNewUser(user);
+        newUser.setPassword(null);
 
-        Map<String, Object> filteredUser = new HashMap<>();
-        filteredUser.put("first_name", user.getFirst_name());
-        filteredUser.put("last_name", user.getLast_name());
-        filteredUser.put("profile", user.getProfile());
-        filteredUser.put("gender", user.getGender());
-        filteredUser.put("email", user.getEmail());
-        filteredUser.put("role", user.getRole());
-
-        Map<String, Object> response = new HashMap<>();
-        response.put("user", filteredUser);
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return new ResponseEntity<>(newUser, HttpStatus.OK);
     }
 
     @GetMapping("/all-users")
@@ -49,13 +37,13 @@ public class UserResource {
     }
 
     @PatchMapping("/update-user/{id}")
-    public ResponseEntity<UserDto> updateUser(@PathVariable Long id, HttpServletRequest request, @RequestBody UserUpdateDto userUpdateDto) {
+    public ResponseEntity<User> updateUser(@PathVariable Long id, HttpServletRequest request, @RequestBody UserUpdateDto userUpdateDto) {
         try {
             String role = (String) request.getAttribute("role");
-            UserDto updatedUser = userService.updateUser(role, id, userUpdateDto);
+            User updatedUser = userService.updateUser(role, id, userUpdateDto);
             return ResponseEntity.ok(updatedUser);
         } catch (EtBadRequestException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null); // Or return an error message DTO
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
     }
 

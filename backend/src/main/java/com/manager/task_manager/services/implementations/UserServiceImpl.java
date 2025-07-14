@@ -1,7 +1,6 @@
 package com.manager.task_manager.services.implementations;
 
 import com.manager.task_manager.domains.User;
-import com.manager.task_manager.domains.dto.UserDto;
 import com.manager.task_manager.domains.dto.UserUpdateDto;
 import com.manager.task_manager.exceptions.EtAuthException;
 import com.manager.task_manager.exceptions.EtBadRequestException;
@@ -69,9 +68,9 @@ public class UserServiceImpl implements UserService {
     public List<User> allUsers(String role) {
         try {
             if (!Objects.equals(role, "admin")) throw new EtBadRequestException("Not enough permissions");
-            return userRepository.findAll();
+            return userRepository.findAllByOrderByUpdatedAtDesc();
         } catch (Exception error) {
-            throw new EtResourceNotFoundException("Invalid details. Failed to create new user");
+            throw new EtBadRequestException("Failed to get users");
         }
     }
 
@@ -80,15 +79,8 @@ public class UserServiceImpl implements UserService {
         return userRepository.findById(id);
     }
 
-    private UserDto convertToDto(User user) {
-        if (user == null) {
-            return null;
-        }
-        return new UserDto(user.getId(), user.getFirst_name(), user.getLast_name(), user.getEmail());
-    }
-
     @Override
-    public UserDto updateUser(String role, Long id, UserUpdateDto userUpdateDto) throws EtBadRequestException {
+    public User updateUser(String role, Long id, UserUpdateDto userUpdateDto) throws EtBadRequestException {
         if(!Objects.equals(role, "admin")) throw new EtAuthException("Not authorised to carry out this function");
 
         User existingUser = userRepository.findById(id);
@@ -134,8 +126,7 @@ public class UserServiceImpl implements UserService {
 
         existingUser.setUpdatedAt(LocalDateTime.now());
 
-        User updatedUser = registrationRepository.save(existingUser);
-        return convertToDto(updatedUser);
+        return registrationRepository.save(existingUser);
     }
 }
 

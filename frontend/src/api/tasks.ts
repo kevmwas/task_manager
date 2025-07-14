@@ -24,7 +24,7 @@ export const fetchTasksCount = createAsyncThunk("tasks/fetch-count", async (stat
   });
 });
 
-export const newTask = async (data: any) => {
+export const newTask = createAsyncThunk("tasks/new-task", async (data) => {
   return await axios
     .post(Config.TASKS.ADD_TASK, data, headers)
     .then((data) => {
@@ -33,15 +33,15 @@ export const newTask = async (data: any) => {
     .catch((error) => {
       catchError(error);
     });
-};
+});
 
-export const updateTask = async (data: any, params: Number) => {
+export const updateTask = createAsyncThunk("tasks/update-task", async (data: any) => {
   return await axios
-    .patch(`${Config.TASKS.UPDATE_TASK}/${params}`, data, headers)
+    .patch(`${Config.TASKS.UPDATE_TASK}/${data.id}`, data, headers)
     .then((data) => {
       return { status: 200, data: data.data };
     })
     .catch((error) => {
       catchError(error);
     });
-};
+});

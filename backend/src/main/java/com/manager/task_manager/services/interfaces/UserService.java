@@ -14,5 +14,5 @@ public interface UserService {
 
     User findMe(Long id);
 
-    UserDto updateUser(String role, Long id, UserUpdateDto userUpdateDto) throws EtBadRequestException;
+    User updateUser(String role, Long id, UserUpdateDto userUpdateDto) throws EtBadRequestException;
 }

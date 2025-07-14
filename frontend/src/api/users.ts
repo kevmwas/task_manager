@@ -13,9 +13,20 @@ export const fetchUsers = createAsyncThunk("users/fetch-users", async () => {
     });
 });
 
-export const updateUser = createAsyncThunk("users/update-user", async (data, params) => {
+export const updateUser = createAsyncThunk("users/update-user", async (data: any) => {
   return await axios
-    .patch(`${Config.USERS.UPDATE_USER}/${params}`, data, headers)
+    .patch(`${Config.USERS.UPDATE_USER}/${data.id}`, data, headers)
+    .then((data) => {
+      return { status: 200, data: data.data };
+    })
+    .catch((error) => {
+      catchError(error);
+    });
+});
+
+export const newUser = createAsyncThunk("users/new-user", async (data) => {
+  return await axios
+    .post(Config.USERS.ADD_USER, data, headers)
     .then((data) => {
       return { status: 200, data: data.data };
     })

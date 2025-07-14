@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { fetchTasks, fetchTasksCount } from '../../api/tasks';
+import { fetchTasks, fetchTasksCount, newTask, updateTask } from '../../api/tasks';
 
 interface TaskUser {
   id: number;
@@ -52,6 +52,38 @@ export const taskSlice = createSlice({
         state.error = null;
       })
       .addCase(fetchTasks.rejected, (state) => {
+        state.loading = false;
+        state.error = null;
+      })
+      .addCase(newTask.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(newTask.fulfilled, (state, action) => {
+        state.loading = false;
+        if (action.payload && action.payload.data) {
+          state.value.push(action.payload.data);
+        }
+        state.error = null;
+      })
+      .addCase(newTask.rejected, (state) => {
+        state.loading = false;
+        state.error = null;
+      })
+      .addCase(updateTask.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(updateTask.fulfilled, (state, action) => {
+        state.loading = false;
+        if (action.payload && action.payload.data) {
+          state.value = state.value.map((task) =>
+            // @ts-ignore
+            task.id === action.payload.data.id ? action.payload.data : task
+          );
+        }
+        state.error = null; })
+      .addCase(updateTask.rejected, (state) => {
         state.loading = false;
         state.error = null;
       });

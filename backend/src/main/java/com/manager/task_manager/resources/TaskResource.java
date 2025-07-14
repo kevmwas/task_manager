@@ -23,7 +23,7 @@ public class TaskResource {
     TaskService taskService;
 
     @PostMapping("/add-task")
-    public ResponseEntity<Map<String, Object>> addTask(HttpServletRequest request, @RequestBody Task task) {
+    public ResponseEntity<Task> addTask(HttpServletRequest request, @RequestBody Task task) {
         int id = (Integer) request.getAttribute("id");
         String role = (String) request.getAttribute("role");
 
@@ -45,18 +45,9 @@ public class TaskResource {
             task.setAssignedTo(assignedTo);
         }
 
-        taskService.addNewTask(task);
+        Task newTask = taskService.addNewTask(task);
 
-        Map<String, Object> filteredTask = new HashMap<>();
-        filteredTask.put("title", task.getTitle());
-        filteredTask.put("description", task.getDescription());
-        filteredTask.put("status", task.getStatus());
-        filteredTask.put("priority", task.getPriority());
-        filteredTask.put("due_date", task.getDueDate());
-
-        Map<String, Object> response = new HashMap<>();
-        response.put("task", filteredTask);
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return new ResponseEntity<>(newTask, HttpStatus.OK);
     }
 
     @PatchMapping("/update-task/{id}")

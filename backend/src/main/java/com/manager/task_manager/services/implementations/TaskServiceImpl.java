@@ -22,8 +22,8 @@ import java.util.stream.Collectors;
 @Service
 @Transactional
 public class TaskServiceImpl implements TaskService {
-   @Autowired
-   TaskRepository taskRepository;
+    @Autowired
+    TaskRepository taskRepository;
 
     @Autowired
     UserRepository userRepository;
@@ -46,8 +46,8 @@ public class TaskServiceImpl implements TaskService {
                 task.getDueDate(),
                 createdByDto,
                 assignedToDto,
-                task.getCreated_at(),
-                task.getUpdated_at(),
+                task.getCreatedAt(),
+                task.getUpdatedAt(),
                 task.getStatus(),
                 task.getPriority()
         );
@@ -56,7 +56,7 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public List<TaskDto> fndMyTasks(Long assigned_to) throws EtBadRequestException {
         try {
-            return taskRepository.findByAssignedTo_Id(assigned_to).stream()
+            return taskRepository.findByAssignedTo_IdOrderByUpdatedAtDesc(assigned_to).stream()
                     .map(this::convertToDto)
                     .collect(Collectors.toList());
         } catch (Exception error) {
@@ -67,12 +67,11 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public Task addNewTask(Task task) throws EtBadRequestException {
         try {
-            task.setUpdated_at(java.time.LocalDateTime.now());
-            task.setCreated_at(java.time.LocalDateTime.now());
+            task.setUpdatedAt(java.time.LocalDateTime.now());
+            task.setCreatedAt(java.time.LocalDateTime.now());
 
             return taskRepository.save(task);
         } catch (Exception error) {
-            System.out.println("the error is here" + error);
             throw new EtBadRequestException("Invalid details. Failed to create new task");
         }
     }
@@ -91,7 +90,7 @@ public class TaskServiceImpl implements TaskService {
     public TaskDto updateTask(Long id, TaskDto taskDto) throws EtBadRequestException {
         try {
             Task existingTask = taskRepository.findById(id);
-            if(existingTask == null) throw new EtResourceNotFoundException("Task not found");
+            if (existingTask == null) throw new EtResourceNotFoundException("Task not found");
 
             Optional.ofNullable(taskDto.getTitle()).ifPresent(existingTask::setTitle);
             Optional.ofNullable(taskDto.getDescription()).ifPresent(existingTask::setDescription);
@@ -107,7 +106,7 @@ public class TaskServiceImpl implements TaskService {
                 existingTask.setAssignedTo(assignedUser);
             }
 
-            existingTask.setUpdated_at(LocalDateTime.now());
+            existingTask.setUpdatedAt(LocalDateTime.now());
 
             Task updatedTask = taskRepository.save(existingTask);
             return convertToDto(updatedTask);
@@ -118,8 +117,8 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public void deleteTask(Long id) throws EtBadRequestException {
-
     }
+}
 
 //    @Override
 //    public long countByStatus(String status) throws EtBadRequestException {
@@ -129,7 +128,7 @@ public class TaskServiceImpl implements TaskService {
 //            System.out.println("the error is here" + error);
 //            throw new EtBadRequestException("Invalid details. Failed to get task count");
 //        }
-    }
+//    }
 
         /*
     @Override

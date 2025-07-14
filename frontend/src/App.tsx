@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router";
 import SignIn from "./pages/AuthPages/SignIn";
 import SignUp from "./pages/AuthPages/SignUp";
-import NotFound from "./pages/OtherPage/NotFound";
+import NotFound from "./pages/Not_Found/NotFound";
 import AppLayout from "./layout/AppLayout";
 import Home from "./pages/Dashboard/Home";
 import KanBanTasks from "./pages/Tasks/Kanban";
@@ -13,7 +13,8 @@ import Users from "./pages/Users/users";
 
 const App = () => {
   const token: any = localStorage.getItem("auth_token");
-  const userInfo  = localStorage.getItem("user_data") ? JSON.parse(localStorage.getItem("user_data")) : {}
+  const userDataString = localStorage.getItem("user_data");
+  const userData = userDataString ? JSON.parse(userDataString) : {};
 
   return (
     <>
@@ -30,7 +31,7 @@ const App = () => {
             </Route>
           }
 
-          {userInfo.role !== "admin" ? <Route path="*" element={<NotFound />} /> : 
+          {userData.role !== "admin" ? <Route path="*" element={<NotFound />} /> : 
             <Route element={<AppLayout />}>
                <Route path="/users" element={<Users />} />
             </Route>

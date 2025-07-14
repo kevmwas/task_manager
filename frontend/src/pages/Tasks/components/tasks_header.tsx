@@ -1,7 +1,20 @@
 import { useModal } from "../../../hooks/useModal";
 import TaskModal from "./task_modal";
 
-const TaskHeader = ({ users, counts }) => {
+interface TaskCounts {
+  in_progress: number;
+  completed: number;
+  to_do: number;
+  cancelled: number;
+}
+
+
+interface TaskHeaderProps {
+  users: any;
+  counts: TaskCounts;
+}
+
+const TaskHeader = ({ users, counts }: TaskHeaderProps) => {
   const { isOpen, openModal, closeModal } = useModal();
 
   return (

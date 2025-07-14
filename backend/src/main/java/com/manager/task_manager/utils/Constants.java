@@ -25,5 +25,5 @@ public class Constants {
     // token valid for 48 hrs
     public static final long TOKEN_VALIDITY = 720L * 60 * 60 * 1000;
 
-    public static final String ID_SECRET_KEY = "this encrypts my ids to fit me";
+    public static final String ID_SECRET_KEY = "bXlTdXBlclNlY3JldEtleTEyMzQ1Ng==";
 }

@@ -17,6 +17,8 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 import java.util.regex.Pattern;
 
 @Service
@@ -92,43 +94,42 @@ public class UserServiceImpl implements UserService {
         User existingUser = userRepository.findById(id);
         if(existingUser == null) throw new EtResourceNotFoundException("User not found");
 
-        if (userUpdateDto.getFirst_name() != null) existingUser.setFirst_name(userUpdateDto.getFirst_name());
+        BiConsumer<String, Consumer<String>> updateIfNotNull = (value, setter) -> {
+            if (value != null) setter.accept(value);
+        };
 
-        if (userUpdateDto.getLast_name() != null) existingUser.setLast_name(userUpdateDto.getLast_name());
+        updateIfNotNull.accept(userUpdateDto.getFirst_name(), existingUser::setFirst_name);
+        updateIfNotNull.accept(userUpdateDto.getLast_name(), existingUser::setLast_name);
 
-        if (userUpdateDto.getEmail() != null) {
-            if (!existingUser.getEmail().equals(userUpdateDto.getEmail()) && userRepository.findByEmail(userUpdateDto.getEmail()) != null) {
+        String newEmail = userUpdateDto.getEmail();
+        if (newEmail != null && !newEmail.equals(existingUser.getEmail())) {
+            User userWithEmail = userRepository.findByEmail(newEmail);
+            if (userWithEmail != null && !userWithEmail.getId().equals(existingUser.getId())) {
                 throw new EtBadRequestException("Email already in use by another user.");
             }
-            existingUser.setEmail(userUpdateDto.getEmail());
+            existingUser.setEmail(newEmail);
         }
 
-        if (userUpdateDto.getPhone() != null) {
-            if (!existingUser.getPhone().equals(userUpdateDto.getPhone()) && userRepository.findByPhone(userUpdateDto.getPhone()) != null) {
+        String newPhone = userUpdateDto.getPhone();
+        if (newPhone != null && !newPhone.equals(existingUser.getPhone())) {
+            User userWithPhone = userRepository.findByPhone(newPhone);
+            if (userWithPhone != null && !userWithPhone.getId().equals(existingUser.getId())) {
                 throw new EtBadRequestException("Phone number already in use by another user.");
             }
-            existingUser.setPhone(userUpdateDto.getPhone());
+            existingUser.setPhone(newPhone);
         }
-        if (userUpdateDto.getId_no() != null) existingUser.setId_no(userUpdateDto.getId_no());
 
-        if (userUpdateDto.getBio() != null) existingUser.setBio(userUpdateDto.getBio());
-
-        if (userUpdateDto.getGender() != null) existingUser.setGender(userUpdateDto.getGender());
-
+        updateIfNotNull.accept(userUpdateDto.getId_no(), existingUser::setId_no);
+        updateIfNotNull.accept(userUpdateDto.getBio(), existingUser::setBio);
+        updateIfNotNull.accept(userUpdateDto.getGender(), existingUser::setGender);
         if (userUpdateDto.getDob() != null) existingUser.setDob(userUpdateDto.getDob());
-
-        if (userUpdateDto.getCountry() != null) existingUser.setCountry(userUpdateDto.getCountry());
-
-        if (userUpdateDto.getCounty() != null) existingUser.setCounty(userUpdateDto.getCounty());
-
-        if (userUpdateDto.getLocation() != null) existingUser.setLocation(userUpdateDto.getLocation());
-
-        if (userUpdateDto.getCity() != null) existingUser.setCity(userUpdateDto.getCity());
-
-        if (userUpdateDto.getProfile() != null) existingUser.setProfile(userUpdateDto.getProfile());
+        updateIfNotNull.accept(userUpdateDto.getCountry(), existingUser::setCountry);
+        updateIfNotNull.accept(userUpdateDto.getCounty(), existingUser::setCounty);
+        updateIfNotNull.accept(userUpdateDto.getLocation(), existingUser::setLocation);
+        updateIfNotNull.accept(userUpdateDto.getCity(), existingUser::setCity);
+        updateIfNotNull.accept(userUpdateDto.getProfile(), existingUser::setProfile);
 
         if (userUpdateDto.getRole() != null) existingUser.setRole(userUpdateDto.getRole());
-
         if (userUpdateDto.getIs_active() != null) existingUser.setIs_active(userUpdateDto.getIs_active());
 
         existingUser.setUpdatedAt(LocalDateTime.now());

@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -92,26 +93,18 @@ public class TaskServiceImpl implements TaskService {
             Task existingTask = taskRepository.findById(id);
             if(existingTask == null) throw new EtResourceNotFoundException("Task not found");
 
-            if (taskDto.getTitle() != null) existingTask.setTitle(taskDto.getTitle());
+            Optional.ofNullable(taskDto.getTitle()).ifPresent(existingTask::setTitle);
+            Optional.ofNullable(taskDto.getDescription()).ifPresent(existingTask::setDescription);
+            Optional.ofNullable(taskDto.getDueDate()).ifPresent(existingTask::setDueDate);
+            Optional.ofNullable(taskDto.getStatus()).ifPresent(existingTask::setStatus);
+            Optional.ofNullable(taskDto.getPriority()).ifPresent(existingTask::setPriority);
 
-            if (taskDto.getDescription() != null) existingTask.setDescription(taskDto.getDescription());
-
-            if (taskDto.getDueDate() != null) existingTask.setDueDate(taskDto.getDueDate());
-
-            if (taskDto.getStatus() != null) existingTask.setStatus(taskDto.getStatus());
-
-            if (taskDto.getPriority() != null) existingTask.setPriority(taskDto.getPriority());
-
-            if (taskDto.getAssignedTo() != null) {
-                Long assignedToId = taskDto.getAssignedTo().getId();
-                if (assignedToId != null) {
-                    User assignedUser = userRepository.findById(assignedToId);
-                    if (assignedUser != null) {
-                        existingTask.setAssignedTo(assignedUser);
-                    } else {
-                        throw new EtBadRequestException("Assigned user not found");
-                    }
+            if (taskDto.getAssignedTo() != null && taskDto.getAssignedTo().getId() != null) {
+                User assignedUser = userRepository.findById(taskDto.getAssignedTo().getId());
+                if (assignedUser == null) {
+                    throw new EtBadRequestException("Assigned user not found");
                 }
+                existingTask.setAssignedTo(assignedUser);
             }
 
             existingTask.setUpdated_at(LocalDateTime.now());

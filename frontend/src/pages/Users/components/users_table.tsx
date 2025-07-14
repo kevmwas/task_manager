@@ -14,16 +14,27 @@ import { Modal } from "../../../components/ui/modal";
 
 
 export type OneUser = {
-  is_active: any;
-  id: Number | null;
-  first_name: string | null;
-  last_name: string | null;
-  email: string | null;
-  country: string | null;
-  city: string | null;
-  status: Boolean;
+  id: number;
+  first_name: string;
+  last_name: string;
+  email: string;
+  password: null;
+  phone: string;
+  id_no: string | null;
+  bio: string | null;
   gender: string | null;
-  phone: number | null;
+  dob: string | null;
+  country: string | null;
+  county: string | null;
+  location: string | null;
+  city: string | null;
+  otp_code: string | null;
+  otp_expiration: string | null;
+  is_active: boolean;
+  profile: string;
+  role: string;
+  createdAt: string;
+  updatedAt: string;
 };
 
 

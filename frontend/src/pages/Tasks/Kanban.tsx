@@ -2,55 +2,50 @@ import { useEffect, useState } from "react";
 import PageBreadcrumb from "../../components/common/PageBreadCrumb";
 import PageMeta from "../../components/common/PageMeta";
 import TaskHeader from "./components/tasks_header";
-import { getUsers } from "../../api/users";
-import { getMyTasks, getMyTasksCount } from "../../api/tasks";
+import { fetchUsers } from "../../api/users";
+import { fetchTasks, fetchTasksCount } from "../../api/tasks";
 import KanbanList from "./components/kanban_list";
 import { useModal } from "../../hooks/useModal";
 import TaskModal from "./components/task_modal";
+import { useSelector, useDispatch } from 'react-redux'
+import { RootState } from "../../hooks/store";
 
 const KanBanTasks = () => {
   const { isOpen, openModal, closeModal } = useModal();
-  const [users, setUsers] = useState([]);
-  const [tasks, setTasks] = useState([]);
   const [count, setCount] = useState({ to_do: 0, in_progress: 0, completed: 0, cancelled: 0 });
   const [activeTask, setActiveTask] = useState({});
 
+  const dispatch = useDispatch();
+  const tasks = useSelector((state: RootState) => state.tasks.value);
+  const users = useSelector((state: RootState) => state.users.value);
+
   const userDataString = localStorage.getItem("user_data");
   const userData = userDataString ? JSON.parse(userDataString) : {};
-  
+
   useEffect(() => {
-    if(userData.role === "admin") {
-      const fetchUsers = async () => {
-        const users = await getUsers();
-        setUsers(users);
-      }
-      
-      fetchUsers();
+    dispatch(fetchTasks() as any);
+
+    Promise.all([
+      dispatch(fetchTasksCount("TODO") as any),
+      dispatch(fetchTasksCount("IN_PROGRESS") as any),
+      dispatch(fetchTasksCount("COMPLETED") as any),
+      dispatch(fetchTasksCount("CANCELLED") as any)
+    ]).then((results) => {
+      const counts = {
+        to_do: results[0]?.payload?.TODO || 0,
+        in_progress: results[1]?.payload?.IN_PROGRESS || 0,
+        completed: results[2]?.payload?.COMPLETED || 0,
+        cancelled: results[3]?.payload?.CANCELLED || 0,
+      };
+      setCount(counts);
+    });
+
+    if (userData.role === "admin") {
+      dispatch(fetchUsers() as any);
     }
 
-    const fetchTasks = async () => {
-      const tasks = await getMyTasks();
-      setTasks(tasks);
-    }
+  }, [dispatch]);
 
-    const fetchTasksCount = async () => {
-      const to_do = await getMyTasksCount("TODO");
-      const in_progress = await getMyTasksCount("IN_PROGRESS");
-      const completed = await getMyTasksCount("COMPLETED");
-      const cancelled = await getMyTasksCount("CANCELLED");
-      const count = {
-        to_do: to_do.TODO | 0,
-        in_progress: in_progress.IN_PROGRESS | 0,
-        completed: completed.COMPLETED | 0,
-        cancelled: cancelled.CANCELLED | 0
-      }
-      setCount(count);
-    }
-
-    fetchTasksCount();
-    fetchTasks();
-  }, []);
-  
   const todoTasks = tasks.filter((task: any) => task.status === "TODO");
   const inProgressTasks = tasks.filter((task: any) => task.status === "IN_PROGRESS");
   const completedTasks = tasks.filter((task: any) => task.status === "COMPLETED");
@@ -65,7 +60,7 @@ const KanBanTasks = () => {
       <PageBreadcrumb pageTitle="Tasks list" />
       <div className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] lg:p-6">
         <div className="flex flex-col items-center px-4 py-5 xl:px-6 xl:py-6">
-          <TaskHeader users={users.length ? users : []} counts={count} />
+          <TaskHeader users={users} counts={count} />
         </div>
         <div className="grid grid-cols-1 border-t border-gray-200 divide-x divide-gray-200 dark:divide-white/[0.05] mt-7 dark:border-white/[0.05] sm:mt-0 sm:grid-cols-2 xl:grid-cols-4">
           <div className="flex flex-col gap-5 p-4 swim-lane xl:p-6">

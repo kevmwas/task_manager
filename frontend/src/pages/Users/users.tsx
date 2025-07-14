@@ -4,30 +4,46 @@ import PageMeta from "../../components/common/PageMeta";
 import UsersTable from "./components/users_table";
 import { Modal } from "../../components/ui/modal";
 import { useModal } from "../../hooks/useModal";
-import { getUsers } from "../../api/users";
+import { fetchUsers } from "../../api/users";
 import Skeleton from "../../components/ui/skeleton";
 import AddUser from "./components/add_user";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../hooks/store";
+
+type User = {
+  id: number;
+  first_name: string;
+  last_name: string;
+  email: string;
+  password: null;
+  phone: string;
+  id_no: string | null;
+  bio: string | null;
+  gender: string | null;
+  dob: string | null;
+  country: string | null;
+  county: string | null;
+  location: string | null;
+  city: string | null;
+  otp_code: string | null;
+  otp_expiration: string | null;
+  is_active: boolean;
+  profile: string;
+  role: string;
+  createdAt: string;
+  updatedAt: string;
+}
 
 const Users = () => {
   const { isOpen, openModal, closeModal } = useModal();
   const [isAdmin, setIsAdmin] = useState(false);
-  const [users, setUsers] = useState([]);
-
+  const dispatch = useDispatch();
+  const users = useSelector((state: RootState) => state.users.value);
 
   useEffect(() => {
-    const fetchUsers = async () => {
-      const users = await getUsers();
-      setUsers(users);
-    }
+    dispatch(fetchUsers() as any);
+  }, [dispatch]);
 
-    fetchUsers();
-  }, []);
-
-
-  type User = {
-    role?: string;
-    [key: string]: any;
-  };
 
   const allUsers = (users as User[]).filter((user) => user.role === "user");
   const allAdmins = (users as User[]).filter((user) => user.role === "admin");

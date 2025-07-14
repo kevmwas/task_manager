@@ -1,0 +1,14 @@
+import { configureStore } from '@reduxjs/toolkit'
+import { taskSlice, tasksCounter } from './slices/task_slice'
+import { userSlice } from './slices/user_slice'
+
+export const store = configureStore({
+  reducer: {
+    tasks: taskSlice.reducer,
+    tasks_count: tasksCounter.reducer,
+    users : userSlice.reducer
+  },
+})
+
+export type RootState = ReturnType<typeof store.getState>
+export type AppDispatch = typeof store.dispatch

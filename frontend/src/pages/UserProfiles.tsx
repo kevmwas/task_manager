@@ -1,10 +1,20 @@
 import PageBreadcrumb from "../components/common/PageBreadCrumb";
 import UserMetaCard from "../components/UserProfile/UserMetaCard";
 import UserInfoCard from "../components/UserProfile/UserInfoCard";
-import UserAddressCard from "../components/UserProfile/UserAddressCard";
 import PageMeta from "../components/common/PageMeta";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../hooks/store";
+import { useEffect } from "react";
+import { fetchMyProfile } from "../api/users";
 
 const UserProfile = () => {
+  const dispatch = useDispatch();
+  const profile = useSelector((state: RootState) => state.profile.value);
+
+  useEffect(() => {
+    dispatch(fetchMyProfile() as any);
+  }, [dispatch]);
+
   return (
     <>
       <PageMeta
@@ -17,9 +27,8 @@ const UserProfile = () => {
           Profile
         </h3>
         <div className="space-y-6">
-          <UserMetaCard />
-          <UserInfoCard />
-          <UserAddressCard />
+          <UserMetaCard info={profile} />
+          <UserInfoCard info={profile} />
         </div>
       </div>
     </>

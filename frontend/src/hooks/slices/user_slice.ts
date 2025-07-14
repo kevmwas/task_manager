@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { fetchUsers, newUser, updateUser } from "../../api/users";
+import { fetchMyProfile, fetchUsers, newUser, updateUser } from "../../api/users";
 
-interface User {
+export interface User {
   id: number;
   first_name: string;
   last_name: string;
@@ -43,6 +43,28 @@ export const userSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
+      .addCase(fetchMyProfile.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchMyProfile.fulfilled, (state, action) => {
+        state.loading = false;
+        // Replace or add the profile in state.value
+        const profile = action.payload;
+        if (profile && profile.id) {
+          const idx = state.value.findIndex((user) => user.id === profile.id);
+          if (idx !== -1) {
+            state.value[idx] = profile;
+          } else {
+            state.value.push(profile);
+          }
+        }
+        state.error = null;
+      })
+      .addCase(fetchMyProfile.rejected, (state) => {
+        state.loading = false;
+        state.error = null;
+      })
       .addCase(fetchUsers.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -83,3 +105,61 @@ export const userSlice = createSlice({
         );
         state.error = null; })
 }});
+
+export interface ProfileState {
+    value: User;
+    loading: Boolean;
+    error: null;
+  }
+  
+  const profileState: ProfileState = {
+    value: {
+        id: 0,
+        first_name: "",
+        last_name: "",
+        email: "",
+        password: null,
+        phone: "",
+        id_no: null,
+        bio: null,
+        gender: null,
+        dob: null,
+        country: null,
+        county: null,
+        location: null,
+        city: null,
+        otp_code: null,
+        otp_expiration: null,
+        is_active: false,
+        profile: "",
+        role: "",
+        createdAt: "",
+        updatedAt: ""
+    },
+    loading: false,
+    error: null,
+  };
+
+export const profile = createSlice({
+    name: "profile",
+    initialState: profileState,
+    reducers: {},
+    extraReducers: (builder) => {
+      builder
+        .addCase(fetchMyProfile.pending, (state) => {
+          state.loading = true;
+          state.error = null;
+        })
+        .addCase(fetchMyProfile.fulfilled, (state, action) => {
+          state.loading = false;
+          const profile = action.payload;
+          if (profile && profile.id) {
+            state.value = profile;
+          }
+          state.error = null;
+        })
+        .addCase(fetchMyProfile.rejected, (state) => {
+          state.loading = false;
+          state.error = null;
+        })
+  }});

@@ -9,6 +9,7 @@ export const Config = {
     ADD_USER: `${baseUrl}/v1/add-user`,
     ALL_USERS: `${baseUrl}/v1/all-users`,
     UPDATE_USER: `${baseUrl}/v1/update-user`,
+    MY_PROFILE: `${baseUrl}/v1/my-profile`,
   },
   TASKS: {
     ADD_TASK: `${baseUrl}/v1/add-task`,

@@ -13,6 +13,17 @@ export const fetchUsers = createAsyncThunk("users/fetch-users", async () => {
     });
 });
 
+export const fetchMyProfile = createAsyncThunk("users/fetch-my-profile", async () => {
+  return await axios
+    .get(Config.USERS.MY_PROFILE, headers)
+    .then((data) => {
+      return data.data;
+    })
+    .catch((error) => {
+     catchError(error);
+    });
+});
+
 export const updateUser = createAsyncThunk("users/update-user", async (data: any) => {
   return await axios
     .patch(`${Config.USERS.UPDATE_USER}/${data.id}`, data, headers)

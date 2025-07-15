@@ -177,7 +177,6 @@ class UserResourceTests {
         assertThat(returnedUser.getPhone()).isEqualTo("9876543210");
     }
 }
-
 class TaskResourceTests {
     @Test
     void testAddTask() throws Exception {

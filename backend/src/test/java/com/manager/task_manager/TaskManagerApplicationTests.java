@@ -175,7 +175,9 @@ class UserResourceTests {
         assertThat(returnedUser.getEmail()).isEqualTo("updated.user@example.com");
         assertThat(returnedUser.getPhone()).isEqualTo("9876543210");
     }
+}
 
+class TaskResourceTests {
     @Test
     void testAddTask() throws Exception {
         TaskService taskService = mock(TaskService.class);

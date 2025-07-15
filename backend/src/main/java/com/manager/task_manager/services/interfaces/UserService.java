@@ -1,7 +1,6 @@
 package com.manager.task_manager.services.interfaces;
 
 import com.manager.task_manager.domains.User;
-import com.manager.task_manager.domains.dto.UserDto;
 import com.manager.task_manager.domains.dto.UserUpdateDto;
 import com.manager.task_manager.exceptions.EtBadRequestException;
 

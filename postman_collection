@@ -44,7 +44,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    // \"identifier\": \"kev@mail.com\",\r\n    \"identifier\": \"louis10makobo20@gmail.com\",\r\n    \"password\": \"qwerty\"\r\n}",
+					"raw": "{\r\n    // \"identifier\": \"kev@mail.com\",\r\n    \"identifier\": \"louis@gmail.com\",\r\n    \"password\": \"qwerty\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -67,21 +67,11 @@
 		{
 			"name": "add user",
 			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE3NTE5NzE0NTIsImV4cCI6MTc1NDU2MzQ1MiwiaWQiOiJSdFpNUzVxdWwzVTJXL096M3BVaDdBPT0iLCJmaXJzdF9uYW1lIjoiTE9VSVMiLCJsYXN0X25hbWUiOiJNQUtPQk8iLCJwaG9uZSI6IjA3MjM1MDM0MjQiLCJlbWFpbCI6ImxvdWlzMTBtYWtvYm8yMEBnbWFpbC5jb20iLCJwcm9maWxlIjoiZGVmYXVsdC5wbmciLCJyb2xlIjoiYWRtaW4ifQ.YRKN49oHo0fWJ4pwmjd3nLprUsH7qvK9vjDshpi4VJEAdQgK-_a35pgp3h8FPtCjwMCJav5ACeLkfOKcJwN7Dg",
-							"type": "string"
-						}
-					]
-				},
 				"method": "POST",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": " {\r\n    \"first_name\": \"John\",\r\n    \"last_name\": \"Doe\",\r\n    \"email\": \"john@example.com\",\r\n    \"password\": \"Password123!\",\r\n    \"phone\": \"+12452267890\",\r\n    \"id_no\": \"ID1345226\",\r\n    \"bio\": \"A short bio about John Doe.\",\r\n    \"gender\": \"male\",\r\n    \"dob\": \"1990-01-01\",\r\n    \"country\": \"USA\",\r\n    \"county\": \"Los Angeles\",\r\n    \"location\": \"123 Main St\",\r\n    \"city\": \"Los Angeles\",\r\n    \"profile\": \"profile.jpg\",\r\n    \"role\": \"user\"\r\n  }",
+					"raw": " {\r\n    \"first_name\": \"John\",\r\n    \"last_name\": \"Smith\",\r\n    \"email\": \"j@example.com\",\r\n    \"password\": \"Password123!\",\r\n    \"phone\": \"124526700890\",\r\n    \"id_no\": \"ID13520026\",\r\n    \"bio\": \"A short bio about John Doe.\",\r\n    \"gender\": \"male\",\r\n    \"dob\": \"1990-01-01\",\r\n    \"country\": \"USA\",\r\n    \"county\": \"Los Angeles\",\r\n    \"location\": \"123 Main St\",\r\n    \"city\": \"Los Angeles\",\r\n    \"profile\": \"profile.jpg\",\r\n    \"role\": \"user\"\r\n  }",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -103,21 +93,38 @@
 			"response": []
 		},
 		{
+			"name": "add task",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "    {\r\n        \"title\": \"Lead Marketing Representative\",\r\n        \"description\": \"Saepe labore minus rerum commodi ab illum aliquam in exercitationem.\",\r\n        \"dueDate\": \"2025-10-27\",\r\n        \"assignedTo\": {\"id\": 5 },\r\n        \"status\": \"TODO\",\r\n        \"priority\": \"LOW\"\r\n    }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:5700/login",
+					"host": [
+						"localhost"
+					],
+					"port": "5700",
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "all users",
 			"protocolProfileBehavior": {
 				"disableBodyPruning": true
 			},
 			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE3NTE5MjkzMjIsImV4cCI6MTc1NDUyMTMyMiwiaWQiOiJSdFpNUzVxdWwzVTJXL096M3BVaDdBPT0iLCJmaXJzdF9uYW1lIjoiTE9VSVMiLCJsYXN0X25hbWUiOiJNQUtPQk8iLCJwaG9uZSI6IjA3MjM1MDM0MjQiLCJlbWFpbCI6ImxvdWlzMTBtYWtvYm8yMEBnbWFpbC5jb20iLCJwcm9maWxlIjoiZGVmYXVsdC5wbmciLCJyb2xlIjoiYWRtaW4ifQ.H7zSuXHpIUwJ8_AX4E9q5eEVau87kaNKUs8rrpvpMl-Tcj1O7pzsg8af_O5T_11ns8-WcY0m6_VlpJjjTl2rvg",
-							"type": "string"
-						}
-					]
-				},
 				"method": "GET",
 				"header": [],
 				"body": {
@@ -139,40 +146,8 @@
 			"response": []
 		},
 		{
-			"name": "add task",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    // \"identifier\": \"kev@mail.com\",\r\n    \"identifier\": \"louis10makobo20@gmail.com\",\r\n    \"password\": \"qwerty\"\r\n}"
-				},
-				"url": {
-					"raw": "localhost:5700/login",
-					"host": [
-						"localhost"
-					],
-					"port": "5700",
-					"path": [
-						"login"
-					]
-				}
-			},
-			"response": []
-		},
-		{
 			"name": "my tasks",
 			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE3NTIwOTc1NzQsImV4cCI6MTc1NDY4OTU3NCwiaWQiOiI1clJNUklJaURSVmVLK0IvdGFpdG5RPT0iLCJmaXJzdF9uYW1lIjoia2VsdmluIiwibGFzdF9uYW1lIjoibXdhbmdpIiwicGhvbmUiOiIxMjQ1MTMiLCJlbWFpbCI6Im13YXNAbWFpbC5jb20iLCJwcm9maWxlIjoiZGVmYXVsdC5wbmciLCJyb2xlIjoidXNlciJ9.YMV-qvU3-1V1oF2tuStf-8Gl881bRWGlDe0ElflIyVjbuNUIODJHpIR4Z125SFcFuviUptOWJHQMtZW7TDThaw",
-							"type": "string"
-						}
-					]
-				},
 				"method": "GET",
 				"header": [],
 				"url": {
@@ -190,18 +165,8 @@
 			"response": []
 		},
 		{
-			"name": "my tasks",
+			"name": "tasks count",
 			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE3NTIwOTc1NzQsImV4cCI6MTc1NDY4OTU3NCwiaWQiOiI1clJNUklJaURSVmVLK0IvdGFpdG5RPT0iLCJmaXJzdF9uYW1lIjoia2VsdmluIiwibGFzdF9uYW1lIjoibXdhbmdpIiwicGhvbmUiOiIxMjQ1MTMiLCJlbWFpbCI6Im13YXNAbWFpbC5jb20iLCJwcm9maWxlIjoiZGVmYXVsdC5wbmciLCJyb2xlIjoidXNlciJ9.YMV-qvU3-1V1oF2tuStf-8Gl881bRWGlDe0ElflIyVjbuNUIODJHpIR4Z125SFcFuviUptOWJHQMtZW7TDThaw",
-							"type": "string"
-						}
-					]
-				},
 				"method": "GET",
 				"header": [],
 				"url": {
@@ -218,6 +183,83 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "my profile",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:5700/v1/my-profile",
+					"host": [
+						"localhost"
+					],
+					"port": "5700",
+					"path": [
+						"v1",
+						"my-profile"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "update user",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\": 4,\r\n    \"first_name\": \"Jacob\",\r\n    \"last_name\": \"Zuma\",\r\n    \"email\": \"zuma@example.com\",\r\n    \"phone\": \"245812452\",\r\n    \"id_no\": \"ID123456\",\r\n    \"bio\": \"A short bio about John Doe.\",\r\n    \"gender\": \"male\",\r\n    \"dob\": \"1990-01-01\",\r\n    \"country\": \"USA\",\r\n    \"county\": \"Los Angeles\",\r\n    \"location\": \"123 Main St\",\r\n    \"city\": \"Los Angeles\",\r\n    \"is_active\": true,\r\n    \"profile\": \"default.png\",\r\n    \"role\": \"user\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:5700/v1/update-user/5",
+					"host": [
+						"localhost"
+					],
+					"port": "5700",
+					"path": [
+						"v1",
+						"update-user",
+						"5"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "update task",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "    {\r\n        \"title\": \"Lead Marketing Representative\",\r\n        \"description\": \"Saepe labore minus rerum commodi ab illum aliquam in exercitationem.\",\r\n        \"dueDate\": \"2025-10-27\",\r\n        \"assignedTo\": {\"id\": 5 },\r\n        \"status\": \"TODO\",\r\n        \"priority\": \"LOW\"\r\n    }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:5700/v1/update-task/4",
+					"host": [
+						"localhost"
+					],
+					"port": "5700",
+					"path": [
+						"v1",
+						"update-task",
+						"4"
+					]
+				}
+			},
+			"response": []
 		}
 	],
 	"auth": {
@@ -225,7 +267,7 @@
 		"bearer": [
 			{
 				"key": "token",
-				"value": "eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE3NTIwOTM0MDQsImV4cCI6MTc1NDY4NTQwNCwiaWQiOiJSdFpNUzVxdWwzVTJXL096M3BVaDdBPT0iLCJmaXJzdF9uYW1lIjoiTE9VSVMiLCJsYXN0X25hbWUiOiJNQUtPQk8iLCJwaG9uZSI6IjA3MjM1MDM0MjQiLCJlbWFpbCI6ImxvdWlzMTBtYWtvYm8yMEBnbWFpbC5jb20iLCJwcm9maWxlIjoiZGVmYXVsdC5wbmciLCJyb2xlIjoiYWRtaW4ifQ.KG8vV2c_0yDlkAEvKAnixCqBvAJddwTGDBYYqIRQgH5MV1iTDbZPsWYfwGAx7ZwKIzPvxUfppS8AH5nICYn3cw",
+				"value": "",
 				"type": "string"
 			}
 		]

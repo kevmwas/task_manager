@@ -25,7 +25,7 @@ import java.util.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
-class UserResourceTests {
+class RegistrationResourceTests {
     @Test
     void testRegisterUser() {
         RegistrationService registrationService = mock(RegistrationService.class);
@@ -84,7 +84,8 @@ class UserResourceTests {
 
         verify(registrationService, times(1)).loginUser(identifier, password);
     }
-
+}
+class UserResourceTests {
     private UserService userService;
     private UserResource userResource;
 
